@@ -67,6 +67,7 @@
             "n" = ["new"];
             "d" = ["describe"];
             "mm" = ["b" "m" "main"];
+            "gp" = ["git" "push"];
           };
         }
         // lib.optionalAttrs
