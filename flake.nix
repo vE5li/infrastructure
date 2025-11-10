@@ -504,6 +504,7 @@
           ./nixos-modules/immich.nix
           ./nixos-modules/esphome.nix
           ./nixos-modules/factorio.nix
+          ./nixos-modules/minecraft.nix
           rathena.nixosModules."x86_64-linux".default
         ];
 
