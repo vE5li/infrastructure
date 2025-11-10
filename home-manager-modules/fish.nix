@@ -243,11 +243,11 @@ in {
     end
 
     function _jujutsu_change_id_shortest
-        echo (jj log -r @ --template 'self.change_id().shortest()' --color=never --no-graph 2>/dev/null)
+        echo (jj log -r @ --template 'self.change_id().shortest()' --color=never --no-graph --ignore-working-copy 2>/dev/null)
     end
 
     function _jujutsu_change_id
-      set -l entire (jj log -r @ --template 'self.change_id().short()' --color=never --no-graph 2>/dev/null)
+      set -l entire (jj log -r @ --template 'self.change_id().short()' --color=never --no-graph --ignore-working-copy 2>/dev/null)
       echo (string replace -r "^$argv" "" "$entire")
     end
 

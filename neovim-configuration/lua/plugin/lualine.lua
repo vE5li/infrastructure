@@ -134,7 +134,7 @@ local function config()
 
     local function get_jujutsu_change_id()
         local directory = vim.fn.expand("%:p:h")
-        local command = "cd " .. vim.fn.shellescape(directory) .. " && jj log -r @ --template 'self.change_id().short()' --color=never --no-graph"
+        local command = "cd " .. vim.fn.shellescape(directory) .. " && jj log -r @ --template 'self.change_id().short()' --color=never --no-graph --ignore-working-copy"
 
         local handle = io.popen(command)
 
