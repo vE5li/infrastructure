@@ -62,12 +62,13 @@
           ui.default-command = "log";
 
           aliases = {
-            "e" = ["edit" "--ignore-immutable"];
-            "a" = ["abandon"];
-            "n" = ["new"];
-            "d" = ["describe"];
-            "mm" = ["b" "m" "main"];
-            "gp" = ["git" "push"];
+            a = ["abandon"];
+            d = ["describe"];
+            e = ["edit" "--ignore-immutable"];
+            f = ["git" "fetch" "--all-remotes"];
+            gp = ["git" "push"];
+            mm = ["b" "m" "main"];
+            n = ["new"];
           };
         }
         // lib.optionalAttrs
