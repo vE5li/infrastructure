@@ -168,7 +168,7 @@ in {
       set -l orange (set_color "#${config.colorScheme.palette.base09}")
       set -g normal (set_color normal)
 
-      set -l ahead (_git_ahead)
+      set -l ahead
       set -g whitespace ' '
 
       set -l status_icon ""
@@ -230,6 +230,8 @@ in {
           set -l dirty "$yellow ✗"
           set git_info "$git_info$dirty"
         end
+
+        set ahead (_git_ahead)
       end
 
       # Notify if a command took more than 5 minutes
