@@ -447,6 +447,7 @@
           ./nixos-modules/nextcloud.nix
           ./nixos-modules/immich.nix
           ./nixos-modules/esphome.nix
+          ./nixos-modules/factorio.nix
           rathena.nixosModules."x86_64-linux".default
         ];
 

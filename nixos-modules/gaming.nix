@@ -5,6 +5,7 @@
     # Minecraft
     prismlauncher
     osu-lazer-bin
+    factorio
   ];
 
   # Tablet for osu!
