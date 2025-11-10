@@ -82,12 +82,6 @@ in {
       description = "List of other machines that can be opened through a terminal shortcut";
       type = types.listOf types.str;
     };
-
-    monitor-scale = mkOption {
-      default = "1.0";
-      type = types.str;
-    };
-
     wallpaper = mkOption {
       type = types.nullOr types.path;
       default = null;
