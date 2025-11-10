@@ -16,6 +16,8 @@ ESPHome devices for Home Assistant.
 
 ### 📂 [`home-manager-modules/`](home-manager-modules)
 
+![Setup](.github/setup.png)
+
 All my home-manager modules.
 The modules use [nix-colors](https://github.com/Misterio77/nix-colors) to provide unified theming for my entire system.
 
