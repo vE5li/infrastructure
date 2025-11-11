@@ -94,10 +94,11 @@
     };
 
     central-ip-address = "192.168.188.10";
+    gateway-ip-address = "167.235.247.100";
 
     yggdrasil-port = 1660;
     central-yggdrasil-peer = [
-      "tcp://${central-ip-address}:${builtins.toString yggdrasil-port}"
+      "tcp://${central-ip-address}:${toString yggdrasil-port}"
     ];
 
     devices = {
@@ -123,6 +124,12 @@
         user-name = "lucas";
         ssh-key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICcNaK4heuRKxBQ++REx9rEaiwBOtLobLqu2RX5MCCOq lucas@korangar-rathena";
         host-name = "korangar-rathena";
+        trusted = false;
+      };
+      gateway = {
+        user-name = "lucas";
+        ssh-key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINK/7vU/BBT6aVgzljcUBBY/KtacoCVegAEVoN31nDG6 lucas@gateway";
+        host-name = "gateway";
         trusted = false;
       };
       central = {
@@ -417,6 +424,55 @@
         };
       };
 
+      #  __________  _______   _________  __________ _________  _______ ____   ____
+      # /   /_____/ /   O   \ /__     __\/   /_____//   \ /   \/   O   \\___\_/___/
+      # \___\%%%%.]/___/%\___\`%%|___|%%'\___\%%%%%'\____|____/___/%\___\%%%/_\%%%
+      #  `BBBBBBBB'`BB'   `BB'    `B'     `BBBBBBBB' `BBBBBBB'`BB'   `BB'   `B'
+      #
+      gateway = with devices.gateway; {
+        deployment = {
+          tags = ["home"];
+          targetHost = host-name;
+        };
+
+        # NixOS modules and config
+        imports = [
+          ./hardware-configuration/gateway.nix
+          ./nixos-modules/base.nix
+          ./nixos-modules/yggdrasil.nix
+        ];
+
+        role-configuration = {
+          inherit host-name user-name;
+          deployment-key = devices.central.ssh-key;
+          authorized-keys = authorized-keys-for-device host-name;
+          grub.efi-support = false;
+
+          yggdrasil = {
+            private-key = ./secrets/gateway-yggdrasil-private-key.age;
+            public-keys = [
+              # Central
+              "85084e044c11649d6bf7c7715efa80f274b2ec3298cb868756e21d0b0a2b0559"
+              # Simon PC
+              "b12d3901b159029248c28244dbb40b5965f7a6106464f362adf48970a400a970"
+            ];
+            port = yggdrasil-port;
+          };
+        };
+
+        # home-manager modules and config
+        home-manager.users.${user-name} = {
+          imports = [
+            ./home-manager-modules/base.nix
+          ];
+
+          role-configuration = {
+            inherit user-name;
+            neovim.include-language-servers = false;
+          };
+        };
+      };
+
       #       ___           ___           ___           ___           ___           ___           ___
       #      /\  \         /\  \         /\__\         /\  \         /\  \         /\  \         /\__\
       #     /::\  \       /::\  \       /::|  |        \:\  \       /::\  \       /::\  \       /:/  /
@@ -465,6 +521,7 @@
 
           yggdrasil = {
             private-key = ./secrets/central-yggdrasil-private-key.age;
+            peers = ["tcp://${gateway-ip-address}:${toString yggdrasil-port}"];
             port = yggdrasil-port;
           };
 
@@ -479,6 +536,11 @@
               ip-address = ip-address;
               hw-address = "B0:41:6F:14:D0:E2";
               yggdrasil-address = "200:f5ef:63f7:67dd:36c5:2810:711d:420a";
+            }
+            {
+              name = gateway.role-configuration.host-name;
+              ip-address = gateway-ip-address;
+              yggdrasil-address = "201:19bb:f374:e243:664c:fa11:a325:4256";
             }
             {
               name = computer.role-configuration.host-name;
@@ -545,6 +607,7 @@
             {
               name = "simon-computer";
               ip-address = "192.168.200.1";
+              yggdrasil-address = "200:9da5:8dfc:9d4d:fadb:6e7a:fb76:4897";
             }
             {
               name = "simon-server";

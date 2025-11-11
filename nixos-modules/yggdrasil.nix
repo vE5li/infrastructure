@@ -19,25 +19,30 @@ in {
         type = types.nullOr types.port;
         default = null;
       };
+      public-keys = mkOption {
+        type = types.listOf types.str;
+        default = [];
+      };
     };
   };
 
-  config = {
-    age.secrets.yggdrasil-private-key.file = config.role-configuration.yggdrasil.private-key;
+  config = with config.role-configuration.yggdrasil; {
+    age.secrets.yggdrasil-private-key.file = private-key;
 
     services.yggdrasil = {
       enable = true;
       configFile = config.age.secrets.yggdrasil-private-key.path;
       settings = {
-        Peers = config.role-configuration.yggdrasil.peers;
+        Peers = peers;
         Listen = lib.mkIf listen [
-          "tcp://0.0.0.0:${builtins.toString config.role-configuration.yggdrasil.port}"
+          "tcp://0.0.0.0:${toString port}"
         ];
+        AllowedPublicKeys = public-keys;
       };
     };
 
     networking.firewall.allowedTCPPorts = lib.mkIf listen [
-      config.role-configuration.yggdrasil.port
+      port
     ];
   };
 }
