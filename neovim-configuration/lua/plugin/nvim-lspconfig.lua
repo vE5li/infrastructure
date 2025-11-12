@@ -29,23 +29,6 @@ local function config()
         end,
     })
 
-    local lspconfig = require("lspconfig")
-
-    -- Nix
-    lspconfig.nil_ls.setup({})
-
-    -- Typescript
-    lspconfig.ts_ls.setup({})
-
-    -- Kotlin
-    lspconfig.kotlin_language_server.setup({})
-
-    -- Python
-    lspconfig.pylsp.setup({})
-
-    -- WGSL
-    -- lspconfig.glasgow.setup({})
-
     -- HACK: Since treesitter doesn't automatically turn on the syntax highlighting for WGSL, we do it with an autocommand for now
     local wgsl_group = vim.api.nvim_create_augroup("wgsl_group", { clear = true })
     vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
@@ -69,7 +52,7 @@ local function config()
     })
 
     -- Lua
-    lspconfig.lua_ls.setup({
+    vim.lsp.config("lua_ls", {
         Lua = {
             runtime = {
                 version = 'LuaJIT',
@@ -90,11 +73,19 @@ local function config()
             },
         },
     })
+
+    vim.lsp.enable({
+        "rust_analyzer",
+        "nil_ls",
+        "ts_ls",
+        "kotlin_language_server",
+        "pylsp",
+        "lua_ls",
+    })
 end
 
 return {
     'neovim/nvim-lspconfig',
-    dependencies = 'simrat39/rust-tools.nvim',
     config = config,
-    event = { "BufRead", "BufNewFile" },
+    lazy = false,
 }
