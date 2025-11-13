@@ -501,7 +501,7 @@
           ./nixos-modules/unbound.nix
           ./nixos-modules/home-assistant.nix
           ./nixos-modules/nextcloud.nix
-          ./nixos-modules/immich.nix
+          # ./nixos-modules/immich.nix
           ./nixos-modules/esphome.nix
           ./nixos-modules/factorio.nix
           ./nixos-modules/minecraft.nix

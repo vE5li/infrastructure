@@ -3,7 +3,8 @@
     enable = true;
     port = 2283;
 
-    machine-learning.enable = true;
+    # Disabled for now
+    machine-learning.enable = false;
 
     # Give Immich access to all devices.
     accelerationDevices = null;
