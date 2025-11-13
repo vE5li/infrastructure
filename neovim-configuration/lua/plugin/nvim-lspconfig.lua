@@ -51,6 +51,17 @@ local function config()
         end,
     })
 
+    -- Nix
+    vim.lsp.config("nil_ls", {
+        settings = {
+            ["nil"] = {
+                formatting = {
+                    command = { "nix", "fmt", "--", "--quiet" }
+                }
+            }
+        }
+    })
+
     -- Lua
     vim.lsp.config("lua_ls", {
         Lua = {
