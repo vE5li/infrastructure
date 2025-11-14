@@ -144,8 +144,6 @@
     enable = true;
 
     virtualHosts."home-assistant.${config.role-configuration.host-name}.${config.role-configuration.domain}" = {
-      sslCertificate = "/etc/ssl/local/_wildcard.central.home.pem";
-      sslCertificateKey = "/etc/ssl/local/_wildcard.central.home-key.pem";
       extraConfig = ''
         proxy_buffering off;
       '';
