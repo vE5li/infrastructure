@@ -52,7 +52,7 @@
             else throw error-message;
 
           # Yggdrasil devices.
-          yggdrasilDevices = builtins.filter (device: builtins.hasAttr "yggdrasil-address" device) devices;
+          yggdrasil-devices = builtins.filter (device: builtins.hasAttr "yggdrasil-address" device) devices;
         in
           []
           # IP records for devices and the domain (e.g. `foo.home.` -> `192.168.188.30`).
@@ -60,7 +60,7 @@
           # IP records for devices name (e.g. `foo.` -> `192.168.188.30`).
           ++ (map (device: ''"${device.name}. IN A ${device.ip-address}"'') devices)
           # IP records for Yggdrasil (e.g. `foo.yggdrasil.` -> `200:4768:2984:14a7:ae0f:74d6:e4a9:8ef0`).
-          ++ (map (device: ''"${device.name}.yggdrasil. IN AAAA ${device.yggdrasil-address}"'') yggdrasilDevices)
+          ++ (map (device: ''"${device.name}.yggdrasil. IN AAAA ${device.yggdrasil-address}"'') yggdrasil-devices)
           # IP records for Subdomains (e.g. `nextcloud.foo.home.` -> `192.168.188.30`).
           ++ (map (subdomain: with config.role-configuration; ''"${subdomain}.${host-name}.${domain}. IN A ${ip-address}"'') config.role-configuration.subdomains);
       };
