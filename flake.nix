@@ -44,7 +44,7 @@
     };
 
     rathena = {
-      url = "github:ve5li/korangar-rathena/46cf0e1abb592c2e954b3165379ffbf41fe583ba";
+      url = "github:ve5li/korangar-rathena";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
