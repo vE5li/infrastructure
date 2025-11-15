@@ -591,11 +591,6 @@
               hw-address = "94:B9:7E:DA:C2:68";
             }
             {
-              name = "kodi";
-              ip-address = "192.168.188.12";
-              hw-address = "2C:CF:67:01:3E:3D";
-            }
-            {
               name = korangar-rathena.role-configuration.host-name;
               ip-address = "49.12.109.207";
             }
@@ -604,11 +599,6 @@
               ip-address = "192.168.188.102";
               hw-address = "8C:F8:C5:BF:C8:6D";
               yggdrasil-address = "200:35c7:b144:b8c9:b220:f820:1c36:b801";
-            }
-            {
-              name = "lucas-phone";
-              ip-address = "192.168.188.128";
-              hw-address = "8E:D1:A6:A1:A4:C9";
             }
             {
               name = "octo-print";
@@ -622,17 +612,7 @@
             }
             {
               name = "simon-computer";
-              ip-address = "192.168.200.1";
               yggdrasil-address = "200:9da5:8dfc:9d4d:fadb:6e7a:fb76:4897";
-            }
-            {
-              name = "simon-server";
-              ip-address = "192.168.200.2";
-            }
-            {
-              name = "tamys-phone";
-              ip-address = "192.168.188.101";
-              hw-address = "42:95:E6:7C:E0:A5";
             }
             {
               name = "television";

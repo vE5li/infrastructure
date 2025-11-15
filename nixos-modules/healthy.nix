@@ -11,7 +11,7 @@
       name = device.name;
       ip = device.ip-address;
     })
-    devices;
+    (builtins.filter (device: builtins.hasAttr "ip-address" device) devices);
 
   yggdrasil-device-info = map (device: {
     name = "${device.name}.yggdrasil";
