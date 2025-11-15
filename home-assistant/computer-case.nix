@@ -13,7 +13,7 @@ in (base.build {
     {
       platform = "gpio";
       pin = "GPIO5";
-      id = "power-button-relay";
+      id = "power_button_relay";
     }
   ];
 
@@ -21,7 +21,7 @@ in (base.build {
     {
       platform = "output";
       name = "Power Button";
-      output = "power-button-relay";
+      output = "power_button_relay";
       duration = "250ms";
     }
   ];

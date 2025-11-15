@@ -321,16 +321,16 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1761672384,
-        "narHash": "sha256-o9KF3DJL7g7iYMZq9SWgfS1BFlNbsm6xplRjVlOCkXI=",
-        "owner": "NixOS",
+        "lastModified": 1763249786,
+        "narHash": "sha256-dTt2Dkc7GxhxrISbTroecLWFph5BCcZcyb006llQM04=",
+        "owner": "ve5li",
         "repo": "nixpkgs",
-        "rev": "08dacfca559e1d7da38f3cf05f1f45ee9bfd213c",
+        "rev": "9926441a6357b34989230379f6d3d1263a495b6e",
         "type": "github"
       },
       "original": {
-        "owner": "NixOS",
-        "ref": "nixos-unstable",
+        "owner": "ve5li",
+        "ref": "bluemap-mods-folder",
         "repo": "nixpkgs",
         "type": "github"
       }

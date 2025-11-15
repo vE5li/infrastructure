@@ -2,7 +2,7 @@
   description = "My home infrastructure";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:ve5li/nixpkgs/bluemap-mods-folder";
 
     colmena = {
       url = "github:zhaofengli/colmena";
