@@ -55,8 +55,6 @@
         :root {
             --tab-max-height: 20px !important;
             --tab-min-height: 0 !important;
-            --toolbar-bgcolor: #32302f !important;
-            color: yellow !important;
         }
 
         /* Bar resizing */
@@ -73,16 +71,7 @@
 
         .tab-background {
             margin: 0 !important;
-            background-color: #32302f !important;
             border-radius: 0px !important;
-        }
-
-        .tab-background[selected] {
-            background-color: #665c54 !important;
-        }
-
-        .tabbrowser-tab[selected] {
-            color: #fbf1c7 !important;
         }
 
         .tab-secondary-label {
@@ -90,29 +79,15 @@
             margin: -.6em 0 .5em !important;
         }
 
-        #TabsToolbar {
-            background-color: #32302f !important;
-            color: #d5c4a1 !important;
-        }
-
-        #urlbar-input-container {
-            background-color: #32302f !important;
-            color: #ebdbb2 !important;
-        }
-
         /* Selection highlight */
         #nav-bar toolbaritem,
         #nav-bar toolbarbutton {
             --focus-outline: none;
-            --slimbar-highlight-color: color-mix(in srgb, var(--lwt-toolbar-field-highlight) 40%, var(--toolbar-bgcolor));
         }
         #nav-bar toolbaritem:focus-visible,
         #nav-bar toolbarbutton:focus-visible,
         #nav-bar toolbaritem #identity-icon-box:focus-visible,
         #nav-bar toolbaritem #star-button-box:focus-visible,
-        #nav-bar toolbaritem .unified-extensions-item-action-button:focus-visible {
-            background-color: var(--slimbar-highlight-color) !important;
-        }
 
         .toolbarbutton-icon {
             fill: #ebdbb2 !important;
