@@ -468,6 +468,12 @@
               "85084e044c11649d6bf7c7715efa80f274b2ec3298cb868756e21d0b0a2b0559"
               # Simon PC
               "b12d3901b159029248c28244dbb40b5965f7a6106464f362adf48970a400a970"
+              # Jonas PC
+              "0d07dc9e44f04f4da3ac2f3bb17948b4259a8f7df51ab9ffeca225eb41ac9fab"
+              # Jannik PC
+              "5aa43460e274dccaa5917a901ed991cd3f792e6e301a34749a18b59ec1e2e09c"
+              # Daniel PC
+              "e598c07f2561e874d2867e073ddebb128019176d6a7c2a8488e8df95b5e335b2"
             ];
             port = yggdrasil-port;
           };
