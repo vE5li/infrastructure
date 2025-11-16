@@ -4,6 +4,8 @@
   pkgs,
   ...
 }: let
+  domains = (map (subdomain: with config.role-configuration; "http://${subdomain}.${host-name}.${domain}") config.role-configuration.subdomains);
+
   devices = config.role-configuration.devices;
 
   device-info =
@@ -20,7 +22,7 @@
 
   device-json = pkgs.writeText "devices.json" (
     lib.strings.toJSON
-    {devices = device-info ++ yggdrasil-device-info;}
+    {domains = domains; devices = device-info ++ yggdrasil-device-info;}
   );
 in {
   services.healthy = {

@@ -183,11 +183,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1763166047,
-        "narHash": "sha256-NHFlobEDPwgdq7FuSqDUFV+bhGBFHvzubOHPb9YShvg=",
+        "lastModified": 1763288026,
+        "narHash": "sha256-a11HjVwLvO3ctysTBOw91DXVOUONdidbC469UkKahBQ=",
         "owner": "ve5li",
         "repo": "healthy",
-        "rev": "8a65e2a208b52a1d8d0a543b8f86d8ae9aa16769",
+        "rev": "b3bcba4443a7bd2df37a538b2c0cc344a06ff25c",
         "type": "github"
       },
       "original": {
