@@ -578,7 +578,7 @@
             {
               name = "computer-case";
               ip-address = "192.168.188.86";
-              # hw-address = "94:B9:7E:DA:2D:94";
+              hw-address = "C0:CD:D6:CA:58:28";
             }
             {
               name = "doorbell";
@@ -589,6 +589,11 @@
               name = "enclosure-lights";
               ip-address = "192.168.188.81";
               hw-address = "94:B9:7E:DA:C2:68";
+            }
+            {
+              name = "computer-lights";
+              ip-address = "192.168.188.89";
+              hw-address = "E8:6B:EA:C4:65:80";
             }
             {
               name = korangar-rathena.role-configuration.host-name;
