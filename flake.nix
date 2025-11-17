@@ -518,7 +518,6 @@
           ./nixos-modules/caddy.nix
           ./nixos-modules/home-assistant.nix
           ./nixos-modules/healthy.nix
-          # ./nixos-modules/immich.nix
           ./nixos-modules/esphome.nix
           ./nixos-modules/factorio.nix
           ./nixos-modules/minecraft.nix
