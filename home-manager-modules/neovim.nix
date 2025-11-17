@@ -106,7 +106,7 @@ in {
 
     programs.neovim = {
       enable = true;
-      package = neovim.packages.${pkgs.system}.default.overrideAttrs {
+      package = neovim.packages.${pkgs.pkgs.stdenv.hostPlatform.system}.default.overrideAttrs {
         treesitter-parsers = {};
       };
     };

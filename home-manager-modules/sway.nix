@@ -216,7 +216,7 @@ in {
     };
 
     home.pointerCursor = {
-      package = cross-cursor.packages.${pkgs.system}.default;
+      package = cross-cursor.packages.${pkgs.stdenv.hostPlatform.system}.default;
       name = "cross-cursor";
       size = 26;
       gtk.enable = true;
