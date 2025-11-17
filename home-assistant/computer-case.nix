@@ -17,6 +17,16 @@ in (base.build {
     }
   ];
 
+  switch = [
+    {
+      platform = "gpio";
+      pin = "GPIO4";
+      id = "lighting_relay";
+      name = "Lighting";
+      icon = "mdi:led-on";
+    }
+  ];
+
   button = [
     {
       platform = "output";
