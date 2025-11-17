@@ -499,6 +499,7 @@
           ./nixos-modules/base.nix
           ./nixos-modules/router.nix
           ./nixos-modules/yggdrasil.nix
+          ./nixos-modules/unifi.nix
           ./nixos-modules/docker.nix
           ./nixos-modules/kea.nix
           ./nixos-modules/unbound.nix
