@@ -144,6 +144,12 @@
         host-name = "central";
         trusted = false;
       };
+      dummy = {
+        user-name = "lucas";
+        ssh-key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGzHmDAD4PqG7Wl0DaO7CKgpY6TXlbUzyEbQ7gCboV69 lucas@nixos";
+        host-name = "dummy";
+        trusted = false;
+      };
     };
 
     device-list = builtins.attrValues devices;
@@ -668,6 +674,11 @@
               ip-address = "192.168.188.11";
               hw-address = "A0:62:FB:14:72:E0";
             }
+            {
+              name = dummy.role-configuration.host-name;
+              ip-address = "192.168.188.99";
+              hw-address = "9C:6B:00:A7:E6:FF";
+            }
           ];
         };
 
@@ -682,6 +693,43 @@
           role-configuration = {
             inherit user-name;
             git.sign-commits = true;
+          };
+        };
+      };
+
+      #    ___                             _  _
+      #   |   \   _  _    _ __    _ __    | || |
+      #   | |) | | +| |  | '  \  | '  \    \_, |
+      #   |___/   \_,_|  |_|_|_| |_|_|_|  _|__/
+      # _|"""""|_|"""""|_|"""""|_|"""""|_| """"|
+      # "`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'
+      #
+      dummy = with devices.dummy; {
+        deployment = {
+          tags = ["home"];
+          targetHost = host-name;
+        };
+
+        # NixOS modules and config
+        imports = [
+          ./hardware-configuration/dummy.nix
+          ./nixos-modules/base.nix
+        ];
+
+        role-configuration = {
+          inherit host-name user-name;
+          deployment-key = devices.central.ssh-key;
+          authorized-keys = authorized-keys-for-device host-name;
+        };
+
+        # home-manager modules and config
+        home-manager.users.${user-name} = {
+          imports = [
+            ./home-manager-modules/base.nix
+          ];
+
+          role-configuration = {
+            inherit user-name;
           };
         };
       };
