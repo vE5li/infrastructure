@@ -170,32 +170,6 @@
         "type": "github"
       }
     },
-    "healthy": {
-      "inputs": {
-        "flake-utils": [
-          "flake-utils"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "rust-overlay": [
-          "rust-overlay"
-        ]
-      },
-      "locked": {
-        "lastModified": 1763288026,
-        "narHash": "sha256-a11HjVwLvO3ctysTBOw91DXVOUONdidbC469UkKahBQ=",
-        "owner": "ve5li",
-        "repo": "healthy",
-        "rev": "b3bcba4443a7bd2df37a538b2c0cc344a06ff25c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ve5li",
-        "repo": "healthy",
-        "type": "github"
-      }
-    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -364,36 +338,14 @@
         "colmena": "colmena",
         "cross-cursor": "cross-cursor",
         "flake-utils": "flake-utils",
-        "healthy": "healthy",
         "home-manager": "home-manager",
         "jovian-nixos": "jovian-nixos",
         "neovim": "neovim",
         "nix-colors": "nix-colors",
         "nixpkgs": "nixpkgs",
         "rathena": "rathena",
-        "rust-overlay": "rust-overlay",
         "systems": "systems",
         "wallpapers": "wallpapers"
-      }
-    },
-    "rust-overlay": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1763087910,
-        "narHash": "sha256-eB9Z1mWd1U6N61+F8qwDggX0ihM55s4E0CluwNukJRU=",
-        "owner": "oxalica",
-        "repo": "rust-overlay",
-        "rev": "cf4a68749733d45c0420726596367acd708eb2e8",
-        "type": "github"
-      },
-      "original": {
-        "owner": "oxalica",
-        "repo": "rust-overlay",
-        "type": "github"
       }
     },
     "stable": {

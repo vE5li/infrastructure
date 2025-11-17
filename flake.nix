@@ -54,13 +54,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    healthy = {
-      url = "github:ve5li/healthy";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-      inputs.rust-overlay.follows = "rust-overlay";
-    };
-
     # Transitive dependencies to allow following
     systems = {
       url = "github:nix-systems/default-linux";
@@ -69,11 +62,6 @@
     flake-utils = {
       url = "github:numtide/flake-utils";
       inputs.systems.follows = "systems";
-    };
-
-    rust-overlay = {
-      url = "github:oxalica/rust-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -89,7 +77,6 @@
     wallpapers,
     rathena,
     jovian-nixos,
-    healthy,
     ...
   }: let
     pkgs = import nixpkgs {
@@ -517,12 +504,10 @@
           ./nixos-modules/unbound.nix
           ./nixos-modules/caddy.nix
           ./nixos-modules/home-assistant.nix
-          ./nixos-modules/healthy.nix
           ./nixos-modules/esphome.nix
           ./nixos-modules/factorio.nix
           ./nixos-modules/minecraft.nix
           rathena.nixosModules."x86_64-linux".default
-          healthy.nixosModules."x86_64-linux".default
         ];
 
         role-configuration = rec {
