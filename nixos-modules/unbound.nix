@@ -29,9 +29,9 @@
         # Refuse ‘version.server’ and ‘version.bind’ queries.
         hide-version = true;
 
-        # Local domain "home".
+        # Local zones.
         local-zone = [
-          ''"${config.role-configuration.domain}." static''
+          ''"home." static''
           ''"yggdrasil." static''
         ];
 
@@ -40,10 +40,10 @@
           inherit (config.role-configuration) domain devices;
 
           # Devices with a local IPv4 address.
-          unchecked-home-devices = builtins.filter (device: builtins.hasAttr "ip-address" device) devices;
+          unchecked-home-devices = builtins.filter (device: device.ip-address != null) devices;
 
           # Yggdrasil devices.
-          yggdrasil-devices = builtins.filter (device: builtins.hasAttr "yggdrasil-address" device) devices;
+          yggdrasil-devices = builtins.filter (device: device.yggdrasil-address != null) devices;
 
           # Create an error message for duplicate IP addresses.
           grouped = builtins.groupBy (device: device.ip-address) unchecked-home-devices;
@@ -56,16 +56,25 @@
             if builtins.stringLength error-message == 0
             then unchecked-home-devices
             else throw error-message;
+
+          # Subdomains
+          subdomains = lib.flatten (map
+            (device: (map (subdomain: {
+                inherit (device) ip-address;
+                domain = "${subdomain}.${domain}";
+              })
+              device.subdomains))
+            home-devices);
         in
           []
-          # IP records for devices and the domain (e.g. `foo.home.` -> `192.168.188.30`).
-          ++ (map (device: ''"${device.name}.${domain}. IN A ${device.ip-address}"'') home-devices)
+          # IP records for local devices (e.g. `foo.home.` -> `192.168.188.30`).
+          ++ (map (device: ''"${device.name}.home. IN A ${device.ip-address}"'') home-devices)
           # IP records for devices name (e.g. `foo.` -> `192.168.188.30`).
           ++ (map (device: ''"${device.name}. IN A ${device.ip-address}"'') home-devices)
           # IP records for Yggdrasil (e.g. `foo.yggdrasil.` -> `200:4768:2984:14a7:ae0f:74d6:e4a9:8ef0`).
           ++ (map (device: ''"${device.name}.yggdrasil. IN AAAA ${device.yggdrasil-address}"'') yggdrasil-devices)
-          # IP records for Subdomains (e.g. `nextcloud.foo.home.` -> `192.168.188.30`).
-          ++ (map (subdomain: with config.role-configuration; ''"${subdomain}.${host-name}.${domain}. IN A ${ip-address}"'') config.role-configuration.subdomains);
+          # IP records for Subdomains (e.g. `nextcloud.domain.com.` -> `192.168.188.30`).
+          ++ (map (subdomain: ''"${subdomain.domain}. IN A ${subdomain.ip-address}"'') subdomains);
       };
 
       forward-zone = [

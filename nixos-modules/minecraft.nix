@@ -1,18 +1,25 @@
-{...}: {
+{
+  config,
+  lib,
+  ...
+}: let
+  minecraft-folder = "/home/lucas/allthemods10-data";
+
+  domain = "bluemap.${config.role-configuration.domain}";
+in {
   # TODO: Currently the minecraft server is started through docker but I would like to move it here.
 
   networking.firewall = {
     allowedTCPPorts = [25565];
   };
 
-  role-configuration.subdomains = ["bluemap"];
-
   services.bluemap = rec {
     enable = true;
     eula = true;
-    defaultWorld = "/home/lucas/allthemods10-data/world";
-    host = "bluemap.central.home";
-    modsFolder = "/home/lucas/allthemods10-data/mods";
+    enableNginx = false;
+    host = domain;
+    defaultWorld = "${minecraft-folder}/world";
+    modsFolder = "${minecraft-folder}/mods";
 
     maps = {
       "overworld" = {
@@ -33,13 +40,40 @@
     };
   };
 
-  # Bluemap also compresses the textures.json so we need to add a rule do decompress it.
-  services.nginx.virtualHosts."bluemap.central.home" = {
-    locations = {
-      "~* ^/maps/[^/]*/textures.json".extraConfig = ''
-        error_page 404 = @empty;
-        gzip_static always;
-      '';
-    };
+  systemd.services."render-bluemap-maps".serviceConfig.Group = lib.mkForce "caddy";
+
+  services.caddy = {
+    virtualHosts.${domain}.extraConfig = ''
+      root * ${config.services.bluemap.webRoot}
+
+      route {
+        @tiles path_regexp ^/maps/[^/]*/tiles/.*
+
+        # Handle tile requests with gzip
+        handle @tiles {
+          rewrite * {path}.gz
+          header Content-Encoding gzip
+          file_server
+        }
+
+        # Handle textures.json requests with gzip
+        @textures path_regexp ^/maps/[^/]*/textures\.json$
+        handle @textures {
+          rewrite * {path}.gz
+          header Content-Encoding gzip
+          file_server
+        }
+
+        file_server
+      }
+
+      handle_errors 404 {
+        @tiles path_regexp ^/maps/[^/]*/tiles/.*
+
+        handle @tiles {
+          respond 204
+        }
+      }
+    '';
   };
 }

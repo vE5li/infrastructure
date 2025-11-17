@@ -518,6 +518,7 @@
           ./nixos-modules/docker.nix
           ./nixos-modules/kea.nix
           ./nixos-modules/unbound.nix
+          ./nixos-modules/caddy.nix
           ./nixos-modules/home-assistant.nix
           ./nixos-modules/nextcloud.nix
           ./nixos-modules/healthy.nix
@@ -535,6 +536,7 @@
           ip-address = central-ip-address;
 
           # Network
+          domain = "0x0c.dev";
           subnet = "192.168.188.0/24";
           router-ip = "192.168.188.1";
 
@@ -558,6 +560,7 @@
               ip-address = ip-address;
               hw-address = "B0:41:6F:14:D0:E2";
               yggdrasil-address = "200:f5ef:63f7:67dd:36c5:2810:711d:420a";
+              subdomains = ["bluemap" "home-assistant" "grafana" "unifi"];
             }
             {
               name = gateway.role-configuration.host-name;

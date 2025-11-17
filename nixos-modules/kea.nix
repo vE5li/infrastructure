@@ -42,7 +42,7 @@
           reservations = (
             map
             (device: {inherit (device) hw-address ip-address;})
-            (builtins.filter (device: builtins.hasAttr "hw-address" device) config.role-configuration.devices)
+            (builtins.filter (device: device.hw-address != null) config.role-configuration.devices)
           );
         }
       ];

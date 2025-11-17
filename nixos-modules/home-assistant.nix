@@ -370,19 +370,9 @@
     };
   };
 
-  role-configuration.subdomains = ["home-assistant"];
-
-  services.nginx = {
-    enable = true;
-
-    virtualHosts."home-assistant.${config.role-configuration.host-name}.${config.role-configuration.domain}" = {
-      extraConfig = ''
-        proxy_buffering off;
-      '';
-      locations."/" = {
-        proxyPass = "http://[::1]:${toString config.services.home-assistant.config.http.server_port}";
-        proxyWebsockets = true;
-      };
-    };
+  services.caddy = {
+    virtualHosts."home-assistant.${config.role-configuration.domain}".extraConfig = ''
+      reverse_proxy http://localhost:${toString config.services.home-assistant.config.http.server_port}
+    '';
   };
 }

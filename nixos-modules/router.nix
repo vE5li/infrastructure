@@ -9,7 +9,6 @@
       type = types.str;
     };
     domain = mkOption {
-      default = "home";
       description = "Domain of this network";
       type = types.str;
     };
@@ -25,18 +24,36 @@
       description = "Pool of DHCP addresses to lease";
       type = types.str;
     };
-    subdomains = mkOption {
-      description = "Subdomains of the central server";
-      type = types.listOf types.str;
-      default = [];
-    };
     devices = mkOption {
-      description = ''
-        A list of permanent devices in this network.
-        A device takes `name` and `ip-address` to set up a DNS entry.
-        Additionally `hw-address` to give the device a static DHCP entry.
-      '';
-      type = types.listOf types.attrs;
+      description = "A list of permanent devices in this network";
+      type = types.listOf (types.submodule {
+        options = {
+          name = mkOption {
+            description = "Name of the device";
+            type = types.str;
+          };
+          ip-address = mkOption {
+            description = "IPv4 address of the device";
+            type = types.nullOr types.str;
+            default = null;
+          };
+          hw-address = mkOption {
+            description = "Hardware address of the device. Used for static DHCP entries";
+            type = types.nullOr types.str;
+            default = null;
+          };
+          yggdrasil-address = mkOption {
+            description = "Yggdrasil network address of the device";
+            type = types.nullOr types.str;
+            default = null;
+          };
+          subdomains = mkOption {
+            description = "Subdomains of this device server";
+            type = types.listOf types.str;
+            default = [];
+          };
+        };
+      });
     };
   };
 
