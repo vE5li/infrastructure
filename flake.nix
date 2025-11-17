@@ -132,6 +132,12 @@
         host-name = "gateway";
         trusted = false;
       };
+      vault = {
+        user-name = "lucas";
+        ssh-key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOypwGwCKpST3dRAQJOXyEChuZ6cyoYqx0qZDchMGdd4 lucas@vault";
+        host-name = "vault";
+        trusted = false;
+      };
       central = {
         user-name = "lucas";
         ssh-key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINxrVu1aTI1If3xBIdCtnOm7z7+KCyWBUfFai9iH9WO5 ve5li@tuta.io";
@@ -477,6 +483,46 @@
         };
       };
 
+      #     _      _          _      _          _
+      #  _ /\\  __/\\__  ___ /\\   _/\\_     __/\\__
+      # / \\ \\(_  ____)/  //\ \\ (_  _))   (__  __))
+      # \:'/ // /  _ \\ \:.\\_\ \\ /  \\      /  \\
+      #  \  // /:./_\ \\ \  :.  ///:.  \\__  /:.  \\
+      # (_  _))\  _   //(_   ___))\__  ____))\__  //
+      #   \//   \// \//   \//        \//        \//
+      #
+      vault = with devices.vault; {
+        deployment = {
+          tags = ["home"];
+          targetHost = host-name;
+        };
+
+        # NixOS modules and config
+        imports = [
+          ./hardware-configuration/vault.nix
+          ./nixos-modules/base.nix
+          ./nixos-modules/caddy.nix
+          ./nixos-modules/prometheus.nix
+        ];
+
+        role-configuration = {
+          inherit host-name user-name;
+          deployment-key = devices.central.ssh-key;
+          authorized-keys = authorized-keys-for-device host-name;
+        };
+
+        # home-manager modules and config
+        home-manager.users.${user-name} = {
+          imports = [
+            ./home-manager-modules/base.nix
+          ];
+
+          role-configuration = {
+            inherit user-name;
+          };
+        };
+      };
+
       #       ___           ___           ___           ___           ___           ___           ___
       #      /\  \         /\  \         /\__\         /\  \         /\  \         /\  \         /\__\
       #     /::\  \       /::\  \       /::|  |        \:\  \       /::\  \       /::\  \       /:/  /
@@ -545,6 +591,11 @@
               hw-address = "B0:41:6F:14:D0:E2";
               yggdrasil-address = "200:f5ef:63f7:67dd:36c5:2810:711d:420a";
               subdomains = ["bluemap" "home-assistant" "grafana" "unifi"];
+            }
+            {
+              name = vault.role-configuration.host-name;
+              ip-address = "192.168.188.22";
+              hw-address = "9C:6B:00:AD:80:1C";
             }
             {
               name = gateway.role-configuration.host-name;
