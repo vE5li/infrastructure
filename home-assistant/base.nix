@@ -8,7 +8,7 @@
     with configuration.esphome; [
       (pkgs.writeShellScriptBin "upload-${name}" ''
         ${lib.getExe pkgs.esphome} compile /home/${config.home.username}/esphome/${name}.yaml
-        ${lib.getExe pkgs.esphome} upload /home/${config.home.username}/esphome/${name}.yaml
+        ${lib.getExe pkgs.esphome} upload /home/${config.home.username}/esphome/${name}.yaml --device ${configuration.wifi.use_address}
       '')
     ];
 

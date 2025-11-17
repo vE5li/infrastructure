@@ -32,9 +32,13 @@
   in {
     platform = "matrix_keypad";
     keypad_id = "keys";
-    name = "Key ${toString index}";
-    id = "key${toString index}";
+    name = "Key ${toString (index + 1)}";
+    id = "key${toString (index + 1)}";
     inherit row col;
+
+    filters = {
+      settle = "250ms";
+    };
   };
 in (base.build {
   esphome.name = "controller";
@@ -46,7 +50,7 @@ in (base.build {
         platform = "neopixelbus";
         variant = "WS2812";
         pin = "GPIO12";
-        num_leds = 15;
+        num_leds = 16;
         type = "GRB";
         name = "WS2812B Light";
         id = "state_light";
@@ -55,12 +59,12 @@ in (base.build {
         };
       }
     ]
-    # Other light partitions (State 1 - State 15)
-    # NOTE: The first LED is not part of the LED strip. As such, we subtract one form the number of LEDs.
-    ++ builtins.genList (index: light-patrition index) (row-count * column-count - 1);
+    # Other light partitions (State 1 - State 16)
+    ++ builtins.genList (index: light-patrition index) (row-count * column-count);
 
   matrix_keypad = {
     id = "keys";
+    has_diodes = true;
     columns = [
       {pin = "GPIO14";}
       {pin = "GPIO27";}
@@ -75,8 +79,7 @@ in (base.build {
     ];
   };
 
-  # NOTE: The first key is not part of the matrix. As such, we subtract one form the number of keys and add one to the index on each invocation.
-  binary_sensor = builtins.genList (index: matrix-key (index + 1)) (row-count * column-count - 1);
+  binary_sensor = builtins.genList (index: matrix-key index) (row-count * column-count);
 
   uart = [
     {
