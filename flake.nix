@@ -250,7 +250,6 @@
             ./home-manager-modules/firefox.nix
             ./home-manager-modules/handlr.nix
             ./home-manager-modules/dunst.nix
-            ./home-manager-modules/nextcloud.nix
           ];
 
           role-configuration = {
@@ -315,7 +314,6 @@
             ./home-manager-modules/firefox.nix
             ./home-manager-modules/handlr.nix
             ./home-manager-modules/dunst.nix
-            ./home-manager-modules/nextcloud.nix
           ];
 
           role-configuration = {
@@ -376,7 +374,6 @@
             ./home-manager-modules/firefox.nix
             ./home-manager-modules/handlr.nix
             ./home-manager-modules/dunst.nix
-            ./home-manager-modules/nextcloud.nix
           ];
 
           role-configuration = {
@@ -520,7 +517,6 @@
           ./nixos-modules/unbound.nix
           ./nixos-modules/caddy.nix
           ./nixos-modules/home-assistant.nix
-          ./nixos-modules/nextcloud.nix
           ./nixos-modules/healthy.nix
           # ./nixos-modules/immich.nix
           ./nixos-modules/esphome.nix
