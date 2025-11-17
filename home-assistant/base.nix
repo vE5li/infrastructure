@@ -26,6 +26,8 @@
 
     logger = {};
 
+    prometheus = {};
+
     api.password = "";
 
     ota = {

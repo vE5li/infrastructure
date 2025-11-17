@@ -212,6 +212,7 @@
           ./nixos-modules/3dprinting.nix
           ./nixos-modules/gaming.nix
           ./nixos-modules/work.nix
+          ./nixos-modules/prometheus.nix
         ];
 
         role-configuration = {
@@ -505,6 +506,8 @@
           ./nixos-modules/unbound.nix
           ./nixos-modules/caddy.nix
           ./nixos-modules/home-assistant.nix
+          ./nixos-modules/prometheus.nix
+          ./nixos-modules/grafana.nix
           ./nixos-modules/esphome.nix
           ./nixos-modules/factorio.nix
           ./nixos-modules/minecraft.nix
