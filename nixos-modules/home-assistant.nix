@@ -51,12 +51,106 @@
       default_config = {};
 
       automation = let
-        # When a state changes from `off` to `on`.
-        turned_on = {entity_id}: {
+        # When a state changes.
+        state-change = {
+          entity_id,
+          to,
+        }: {
           trigger = "state";
           entity_id = [entity_id];
-          from = "off";
-          to = "on";
+          inherit to;
+        };
+
+        # When a state changes to `on`.
+        turned-on = {entity_id}:
+          state-change {
+            inherit entity_id;
+            to = "on";
+          };
+
+        # When a state changes to `off`.
+        turned-off = {entity_id}:
+          state-change {
+            inherit entity_id;
+            to = "off";
+          };
+
+        # Toggle a switch.
+        turn-switch-on = target: {
+          action = "switch.turn_on";
+          inherit target;
+        };
+
+        # Toggle a switch.
+        turn-switch-off = target: {
+          action = "switch.turn_off";
+          inherit target;
+        };
+
+        # Toggle a light.
+        turn-light-on = target: data: {
+          action = "light.turn_on";
+          inherit data target;
+        };
+
+        # Toggle a light.
+        turn-light-off = target: {
+          action = "light.turn_off";
+          inherit target;
+        };
+
+        # Wait for change.
+        wait-till-available = target: {
+          wait_for_trigger = [
+            {
+              trigger = "state";
+              entity_id = target;
+              from = "unavailable";
+            }
+          ];
+        };
+
+        # Set the light to the same state as some input.
+        set-light-to = {
+          input_entity_id,
+          target,
+          color,
+        }: {
+          choose = [
+            {
+              conditions = [
+                {
+                  condition = "state";
+                  entity_id = input_entity_id;
+                  state = "on";
+                }
+              ];
+              sequence = [
+                {
+                  action = "light.turn_on";
+                  inherit target;
+                  data = {
+                    rgb_color = color;
+                  };
+                }
+              ];
+            }
+            {
+              conditions = [
+                {
+                  condition = "state";
+                  entity_id = input_entity_id;
+                  state = "off";
+                }
+              ];
+              sequence = [
+                {
+                  action = "light.turn_off";
+                  inherit target;
+                }
+              ];
+            }
+          ];
         };
 
         # Send a notification with an alarm tone to the phone.
@@ -76,12 +170,78 @@
           };
         };
       in [
+        # Turn computer lighting on.
+        {
+          alias = "computer lights on";
+          description = "Turn on the computers lighting in sequence";
+          mode = "restart";
+          triggers = [
+            (turned-on {entity_id = "input_boolean.computer_lights_toggle";})
+          ];
+          actions = [
+            (turn-switch-on {entity_id = "switch.computer_case_lighting";})
+            (wait-till-available "light.computer_lights")
+            (turn-light-on {entity_id = "light.computer_lights";} {effect = "Phased";})
+          ];
+        }
+
+        # Turn computer lighting off.
+        {
+          alias = "computer lights off";
+          description = "Turn off the computers lighting in sequence";
+          mode = "single";
+          triggers = [
+            (turned-off {entity_id = "input_boolean.computer_lights_toggle";})
+          ];
+          actions = [
+            (turn-light-off {entity_id = "light.computer_lights";})
+            {delay = {seconds = 4;};}
+            (turn-switch-off {entity_id = "switch.computer_case_lighting";})
+          ];
+        }
+
+        # Computer light key action.
+        {
+          alias = "computer light key action";
+          description = "Toggle the computer light when pressing Key1";
+          mode = "single";
+          triggers = [
+            (turned-on {entity_id = "binary_sensor.key_1";})
+          ];
+          actions = [
+            {
+              action = "input_boolean.toggle";
+              target = {entity_id = "input_boolean.computer_lights_toggle";};
+            }
+          ];
+        }
+
+        # Computer light key led.
+        {
+          alias = "computer light key indicator";
+          description = "Toggle the key1 LED when the computer light changes state";
+          mode = "single";
+          triggers = [
+            {
+              trigger = "state";
+              entity_id = ["input_boolean.computer_lights_toggle"];
+            }
+          ];
+          actions = [
+            (set-light-to {
+              input_entity_id = "input_boolean.computer_lights_toggle";
+              target = {entity_id = "light.state_1_light";};
+              color = [255 120 20];
+            })
+          ];
+        }
+
         # Send notification for the doorbell downstairs.
         {
           alias = "downstairs doorbell phone notification";
           description = "Send notification for the doorbell downstairs";
           triggers = [
-            (turned_on {entity_id = "binary_sensor.doorbell_button_downstairs";})
+            (turned-on {entity_id = "binary_sensor.doorbell_button_downstairs";})
           ];
           actions = [
             (alarm-notification {
@@ -100,7 +260,7 @@
           alias = "upstairs doorbell phone notification";
           description = "Send notification for the doorbell upstairs";
           triggers = [
-            (turned_on {entity_id = "binary_sensor.doorbell_button_upstairs";})
+            (turned-on {entity_id = "binary_sensor.doorbell_button_upstairs";})
           ];
           actions = [
             (alarm-notification {
@@ -119,7 +279,7 @@
           description = "testing the light switch";
           mode = "single";
           triggers = [
-            (turned_on {entity_id = "input_boolean.test_toggle";})
+            (turned-on {entity_id = "input_boolean.test_toggle";})
           ];
           actions = [
             {
