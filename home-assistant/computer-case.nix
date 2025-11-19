@@ -35,4 +35,12 @@ in (base.build {
       duration = "250ms";
     }
   ];
+
+  binary_sensor = [
+    {
+      platform = "gpio";
+      pin = "GPIO15";
+      name = "Power LED";
+    }
+  ];
 })
