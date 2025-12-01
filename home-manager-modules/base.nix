@@ -64,11 +64,13 @@
           aliases = {
             a = ["abandon"];
             d = ["describe"];
+            df = ["diff" "-r"];
             e = ["edit" "--ignore-immutable"];
             f = ["git" "fetch" "--all-remotes"];
             gp = ["git" "push"];
             mm = ["b" "m" "main"];
             n = ["new"];
+            sq = ["squash" "-u"];
           };
         }
         // lib.optionalAttrs
