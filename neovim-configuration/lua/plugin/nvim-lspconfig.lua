@@ -86,7 +86,6 @@ local function config()
     })
 
     vim.lsp.enable({
-        "rust_analyzer",
         "nil_ls",
         "ts_ls",
         "kotlin_language_server",
