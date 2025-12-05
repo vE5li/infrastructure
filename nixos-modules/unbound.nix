@@ -84,6 +84,7 @@
           forward-addr = [
             "1.1.1.1@853#cloudflare-dns.com"
             "1.0.0.1@853#cloudflare-dns.com"
+            "86.54.11.100"
           ];
           forward-tls-upstream = true;
         }
