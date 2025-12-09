@@ -1,19 +1,15 @@
 {pkgs, ...}: {
-  # Enable OpenGL
-  hardware.graphics.enable = true;
+  programs.niri.enable = true;
 
-  # NOTE: We enable Sway here *and* in home-manager to set the correct config values for xdg-desktop-portal and opengl.
-  programs.sway = {
-    enable = true;
-    # Disable packages pulled in for the default sway configuration. We will define all packages we need in home-manager.
-    extraPackages = [];
-  };
+  # XWayland
+  environment.systemPackages = [pkgs.xwayland-satellite];
 
   # Screensharing
+  security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
-    pulse.enable = true;
     alsa.enable = true;
+    pulse.enable = true;
     wireplumber.enable = true;
   };
 

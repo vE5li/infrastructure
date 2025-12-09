@@ -179,7 +179,7 @@ in {
         set status_icon ""
       end
 
-      set -l shell_level_threshold 4
+      set -l shell_level_threshold 5
       set -l ssh_prefix ""
       if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]
         set -l username (whoami)

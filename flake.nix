@@ -33,6 +33,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    niri = {
+      url = "github:sodiboo/niri-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     cross-cursor = {
       url = "github:ve5li/cross-cursor";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -71,8 +76,9 @@
     colmena,
     agenix,
     home-manager,
-    neovim,
     nix-colors,
+    neovim,
+    niri,
     cross-cursor,
     wallpapers,
     rathena,
@@ -81,6 +87,7 @@
   }: let
     pkgs = import nixpkgs {
       system = "x86_64-linux";
+      overlays = [niri.overlays.niri];
     };
 
     nixpkgs-steam-deck = {
@@ -180,6 +187,7 @@
         imports = [
           agenix.nixosModules.default
           home-manager.nixosModules.home-manager
+          niri.nixosModules.niri
         ];
 
         home-manager = {
@@ -215,7 +223,7 @@
           ./nixos-modules/yggdrasil.nix
           ./nixos-modules/udev-embedded.nix
           ./nixos-modules/audio.nix
-          ./nixos-modules/sway.nix
+          ./nixos-modules/niri.nix
           ./nixos-modules/docker.nix
           ./nixos-modules/wireshark.nix
           ./nixos-modules/android.nix
@@ -243,7 +251,7 @@
         home-manager.users.${user-name} = {
           imports = [
             ./home-manager-modules/base.nix
-            ./home-manager-modules/sway.nix
+            ./home-manager-modules/niri.nix
             ./home-manager-modules/gammastep.nix
             ./home-manager-modules/rofi.nix
             ./home-manager-modules/foot.nix
@@ -281,7 +289,7 @@
           ./nixos-modules/yggdrasil.nix
           ./nixos-modules/udev-embedded.nix
           ./nixos-modules/audio.nix
-          ./nixos-modules/sway.nix
+          ./nixos-modules/niri.nix
           ./nixos-modules/docker.nix
           ./nixos-modules/wireshark.nix
           ./nixos-modules/android.nix
@@ -307,7 +315,7 @@
         home-manager.users.${user-name} = {
           imports = [
             ./home-manager-modules/base.nix
-            ./home-manager-modules/sway.nix
+            ./home-manager-modules/niri.nix
             ./home-manager-modules/gammastep.nix
             ./home-manager-modules/rofi.nix
             ./home-manager-modules/foot.nix
@@ -344,7 +352,7 @@
           ./nixos-modules/base.nix
           ./nixos-modules/yggdrasil.nix
           ./nixos-modules/audio.nix
-          ./nixos-modules/sway.nix
+          ./nixos-modules/niri.nix
           ./nixos-modules/docker.nix
           ./nixos-modules/wireshark.nix
           ./nixos-modules/music.nix
@@ -367,7 +375,7 @@
         home-manager.users.${user-name} = {
           imports = [
             ./home-manager-modules/base.nix
-            ./home-manager-modules/sway.nix
+            ./home-manager-modules/niri.nix
             ./home-manager-modules/gammastep.nix
             ./home-manager-modules/rofi.nix
             ./home-manager-modules/foot.nix
@@ -390,7 +398,7 @@
           enable = true;
           autoStart = true;
           user = user-name;
-          desktopSession = "sway";
+          desktopSession = "niri";
         };
       };
 

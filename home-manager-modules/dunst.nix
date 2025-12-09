@@ -91,7 +91,7 @@
   };
 
   # FIX: For some reason dunst does not create a service.
-  wayland.windowManager.sway.config.startup = [
-    {command = "${lib.getExe config.services.dunst.package}";}
+  programs.niri.settings.spawn-at-startup = [
+    {argv = [(lib.getExe config.services.dunst.package)];}
   ];
 }
