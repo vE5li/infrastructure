@@ -24,7 +24,7 @@
     programs.home-manager.enable = true;
 
     # State version
-    home.stateVersion = "25.11";
+    home.stateVersion = "26.05";
 
     # User configuration
     home.username = user-name;

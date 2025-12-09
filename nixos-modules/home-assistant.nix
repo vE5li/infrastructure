@@ -41,7 +41,6 @@
     config = {
       http = {
         server_port = 8123;
-        server_host = "::1";
         trusted_proxies = ["::1"];
         use_x_forwarded_for = true;
       };
