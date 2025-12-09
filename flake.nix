@@ -218,7 +218,7 @@
           ./nixos-modules/sway.nix
           ./nixos-modules/docker.nix
           ./nixos-modules/wireshark.nix
-          ./nixos-modules/adb.nix
+          ./nixos-modules/android.nix
           ./nixos-modules/steam.nix
           ./nixos-modules/music.nix
           ./nixos-modules/3dprinting.nix
@@ -284,7 +284,7 @@
           ./nixos-modules/sway.nix
           ./nixos-modules/docker.nix
           ./nixos-modules/wireshark.nix
-          ./nixos-modules/adb.nix
+          ./nixos-modules/android.nix
           ./nixos-modules/steam.nix
           ./nixos-modules/music.nix
           ./nixos-modules/3dprinting.nix
