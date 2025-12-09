@@ -27,7 +27,7 @@ local opts = {
     },
 
     sources = {
-        default = { 'lsp', 'path', 'snippets', 'buffer', 'ripgrep', 'emoji', },
+        default = { 'lsp', 'path', 'buffer', 'ripgrep', 'emoji', },
         providers = {
             -- Emoji provider
             emoji = {
@@ -50,7 +50,9 @@ local opts = {
                 ---@type blink-ripgrep.Options
                 opts = {
                     backend = {
-                        use = "gitgrep-or-ripgrep",
+                        ripgrep = {
+                            project_root_fallback = false,
+                        },
                     },
                 },
             },
