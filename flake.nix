@@ -28,6 +28,13 @@
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
 
+    lan-pam = {
+      url = "github:ve5li/lan-pam?dir=pam-exec";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+      inputs.rust-overlay.follows = "rust-overlay";
+    };
+
     neovim = {
       url = "github:nix-community/neovim-nightly-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -68,6 +75,11 @@
       url = "github:numtide/flake-utils";
       inputs.systems.follows = "systems";
     };
+
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -77,6 +89,7 @@
     agenix,
     home-manager,
     nix-colors,
+    lan-pam,
     neovim,
     niri,
     cross-cursor,
@@ -190,6 +203,8 @@
           niri.nixosModules.niri
         ];
 
+        _module.args = {inherit lan-pam;};
+
         home-manager = {
           useGlobalPkgs = true;
           useUserPackages = true;
@@ -220,6 +235,7 @@
         imports = [
           ./hardware-configuration/computer.nix
           ./nixos-modules/base.nix
+          ./nixos-modules/pam.nix
           ./nixos-modules/yggdrasil.nix
           ./nixos-modules/udev-embedded.nix
           ./nixos-modules/audio.nix
@@ -239,7 +255,6 @@
           inherit host-name user-name;
           grub.resolution = "3840x1080";
           deployment-key = devices.central.ssh-key;
-          authorized-keys = authorized-keys-for-device host-name;
 
           yggdrasil = {
             private-key = ./secrets/computer-yggdrasil-private-key.age;
@@ -286,6 +301,7 @@
         imports = [
           ./hardware-configuration/laptop.nix
           ./nixos-modules/base.nix
+          ./nixos-modules/pam.nix
           ./nixos-modules/yggdrasil.nix
           ./nixos-modules/udev-embedded.nix
           ./nixos-modules/audio.nix
@@ -303,7 +319,6 @@
         role-configuration = {
           inherit host-name user-name;
           deployment-key = devices.central.ssh-key;
-          authorized-keys = authorized-keys-for-device host-name;
 
           yggdrasil = {
             private-key = ./secrets/laptop-yggdrasil-private-key.age;
@@ -350,6 +365,7 @@
         imports = [
           ./hardware-configuration/steam-deck.nix
           ./nixos-modules/base.nix
+          ./nixos-modules/pam.nix
           ./nixos-modules/yggdrasil.nix
           ./nixos-modules/audio.nix
           ./nixos-modules/niri.nix
@@ -363,7 +379,6 @@
         role-configuration = {
           inherit host-name user-name;
           deployment-key = devices.central.ssh-key;
-          authorized-keys = authorized-keys-for-device host-name;
 
           yggdrasil = {
             private-key = ./secrets/steam-deck-yggdrasil-private-key.age;
@@ -515,6 +530,7 @@
         imports = [
           ./hardware-configuration/vault.nix
           ./nixos-modules/base.nix
+          ./nixos-modules/pam.nix
           ./nixos-modules/caddy.nix
           ./nixos-modules/prometheus.nix
         ];
@@ -522,7 +538,6 @@
         role-configuration = {
           inherit host-name user-name;
           deployment-key = devices.central.ssh-key;
-          authorized-keys = authorized-keys-for-device host-name;
         };
 
         # home-manager modules and config
@@ -558,6 +573,7 @@
         imports = [
           ./hardware-configuration/central.nix
           ./nixos-modules/base.nix
+          ./nixos-modules/pam.nix
           ./nixos-modules/router.nix
           ./nixos-modules/yggdrasil.nix
           ./nixos-modules/unifi.nix
@@ -576,7 +592,6 @@
 
         role-configuration = rec {
           inherit host-name user-name;
-          authorized-keys = authorized-keys-for-device host-name;
           ip-address = central-ip-address;
 
           # Network
@@ -627,6 +642,12 @@
               ip-address = "192.168.188.85";
               hw-address = "14:13:33:D6:65:A1";
               yggdrasil-address = "200:cdf1:2759:d689:fa95:affc:923c:929e";
+            }
+            {
+              name = "phone";
+              ip-address = "192.168.188.12";
+              hw-address = "78:53:64:06:26:DC";
+              yggdrasil-address = "201:9283:384b:e6a8:c56c:be94:db6a:fff2";
             }
             {
               name = "controller";
@@ -722,12 +743,12 @@
         imports = [
           ./hardware-configuration/dummy.nix
           ./nixos-modules/base.nix
+          ./nixos-modules/pam.nix
         ];
 
         role-configuration = {
           inherit host-name user-name;
           deployment-key = devices.central.ssh-key;
-          authorized-keys = authorized-keys-for-device host-name;
         };
 
         # home-manager modules and config

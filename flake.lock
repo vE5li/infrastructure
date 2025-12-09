@@ -212,6 +212,34 @@
         "type": "github"
       }
     },
+    "lan-pam": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "rust-overlay": [
+          "rust-overlay"
+        ]
+      },
+      "locked": {
+        "dir": "pam-exec",
+        "lastModified": 1765486169,
+        "narHash": "sha256-idcivu6Z/E+87+HNJL22hxWNWBuKfbZdB8fxDMyOrnk=",
+        "owner": "ve5li",
+        "repo": "lan-pam",
+        "rev": "8a1e72c2fce753a631f03fd5f4efe2ffde9046f4",
+        "type": "github"
+      },
+      "original": {
+        "dir": "pam-exec",
+        "owner": "ve5li",
+        "repo": "lan-pam",
+        "type": "github"
+      }
+    },
     "neovim": {
       "inputs": {
         "flake-parts": "flake-parts",
@@ -414,13 +442,35 @@
         "flake-utils": "flake-utils",
         "home-manager": "home-manager",
         "jovian-nixos": "jovian-nixos",
+        "lan-pam": "lan-pam",
         "neovim": "neovim",
         "niri": "niri",
         "nix-colors": "nix-colors",
         "nixpkgs": "nixpkgs",
         "rathena": "rathena",
+        "rust-overlay": "rust-overlay",
         "systems": "systems",
         "wallpapers": "wallpapers"
+      }
+    },
+    "rust-overlay": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1765465581,
+        "narHash": "sha256-fCXT0aZXmTalM3NPCTedVs9xb0egBG5BOZkcrYo5PGE=",
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "rev": "99cc5667eece98bb35dcf35f7e511031a8b7a125",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "type": "github"
       }
     },
     "stable": {
