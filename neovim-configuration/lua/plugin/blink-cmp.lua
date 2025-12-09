@@ -1,5 +1,7 @@
 local opts = {
     keymap = {
+        ['<Up>'] = false,
+        ['<Down>'] = false,
         ['<C-n>'] = { 'select_next', 'fallback' },
         ['<C-l>'] = { 'select_prev', 'fallback' },
         ['<C-e>'] = { 'select_and_accept' },
