@@ -2,7 +2,7 @@
   description = "My home infrastructure";
 
   inputs = {
-    nixpkgs.url = "github:ve5li/nixpkgs/bluemap-mods-folder";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     colmena = {
       url = "github:zhaofengli/colmena";
@@ -596,7 +596,7 @@
               ip-address = ip-address;
               hw-address = "B0:41:6F:14:D0:E2";
               yggdrasil-address = "200:f5ef:63f7:67dd:36c5:2810:711d:420a";
-              subdomains = ["bluemap" "home-assistant" "grafana" "unifi"];
+              subdomains = ["home-assistant" "grafana" "unifi"];
             }
             {
               name = vault.role-configuration.host-name;
