@@ -235,7 +235,7 @@
         imports = [
           ./hardware-configuration/computer.nix
           ./nixos-modules/base.nix
-          ./nixos-modules/pam.nix
+          ./nixos-modules/lan-pam.nix
           ./nixos-modules/yggdrasil.nix
           ./nixos-modules/udev-embedded.nix
           ./nixos-modules/audio.nix
@@ -301,7 +301,7 @@
         imports = [
           ./hardware-configuration/laptop.nix
           ./nixos-modules/base.nix
-          ./nixos-modules/pam.nix
+          ./nixos-modules/lan-pam.nix
           ./nixos-modules/yggdrasil.nix
           ./nixos-modules/udev-embedded.nix
           ./nixos-modules/audio.nix
@@ -365,7 +365,7 @@
         imports = [
           ./hardware-configuration/steam-deck.nix
           ./nixos-modules/base.nix
-          ./nixos-modules/pam.nix
+          ./nixos-modules/lan-pam.nix
           ./nixos-modules/yggdrasil.nix
           ./nixos-modules/audio.nix
           ./nixos-modules/niri.nix
@@ -530,7 +530,7 @@
         imports = [
           ./hardware-configuration/vault.nix
           ./nixos-modules/base.nix
-          ./nixos-modules/pam.nix
+          ./nixos-modules/lan-pam.nix
           ./nixos-modules/caddy.nix
           ./nixos-modules/prometheus.nix
         ];
@@ -575,7 +575,7 @@
         imports = [
           ./hardware-configuration/central.nix
           ./nixos-modules/base.nix
-          ./nixos-modules/pam.nix
+          ./nixos-modules/lan-pam.nix
           ./nixos-modules/router.nix
           ./nixos-modules/yggdrasil.nix
           ./nixos-modules/unifi.nix
@@ -745,7 +745,7 @@
         imports = [
           ./hardware-configuration/dummy.nix
           ./nixos-modules/base.nix
-          ./nixos-modules/pam.nix
+          ./nixos-modules/lan-pam.nix
         ];
 
         role-configuration = {
