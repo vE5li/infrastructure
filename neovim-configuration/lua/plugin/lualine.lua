@@ -132,9 +132,10 @@ local function config()
         return mode_color[get_mode_name()]
     end
 
-    local function get_jujutsu_change_id()
+    local function get_jujutsu_closest_bookmark()
         local directory = vim.fn.expand("%:p:h")
-        local command = "cd " .. vim.fn.shellescape(directory) .. " && jj log -r @ --template 'self.change_id().short()' --color=never --no-graph --ignore-working-copy"
+        local command = "cd " .. vim.fn.shellescape(directory) .. " && jj log -r 'closest_bookmark(@)' --template 'self.local_bookmarks()' --color=never --no-graph --ignore-working-copy"
+
 
         local handle = io.popen(command)
 
@@ -323,7 +324,7 @@ local function config()
     -- Current Jujutsu change id
     ins_right({
         function()
-            return get_jujutsu_change_id()
+            return get_jujutsu_closest_bookmark()
         end,
         cond = conditions.check_jujutsu_workspace,
     }, true)

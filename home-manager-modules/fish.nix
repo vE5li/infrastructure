@@ -212,11 +212,17 @@ in {
       end
       set -l cwd $orange(basename (prompt_pwd))
 
-      if [ (_jujutsu_change_id_shortest) ]
-          set -l shortest (_jujutsu_change_id_shortest)
-          set -l short (_jujutsu_change_id $shortest)
+      if [ (_jujutsu_closest_bookmark) ]
+          set -l bookmark (_jujutsu_closest_bookmark)
+          set -l bookmark_offset (_jujutsu_bookmark_offset)
 
-          set git_info "$normal jj:($red$shortest$blue$short$normal)"
+          set git_info "$normal jj:($blue$bookmark"
+
+          if [ "$bookmark_offset" -gt 0 ]
+            set git_info "$git_info $red+ $bookmark_offset"
+          end
+
+          set git_info "$git_info$normal)"
       else if [ (_git_branch_name) ]
         if test (_git_branch_name) = 'main' || test (_git_branch_name) = 'master'
           set -l git_branch (_git_branch_name)
@@ -242,13 +248,12 @@ in {
       echo -n -s $ssh_prefix $initial_indicator $whitespace $cwd $git_info $whitespace $ahead $shell_level $status_indicator $normal $whitespace $whitespace
     end
 
-    function _jujutsu_change_id_shortest
-        echo (jj log -r @ --template 'self.change_id().shortest()' --color=never --no-graph --ignore-working-copy 2>/dev/null)
+    function _jujutsu_closest_bookmark
+      jj log -r 'closest_bookmark(@)' --template 'self.local_bookmarks()' --color=never --no-graph --ignore-working-copy 2>/dev/null
     end
 
-    function _jujutsu_change_id
-      set -l entire (jj log -r @ --template 'self.change_id().short()' --color=never --no-graph --ignore-working-copy 2>/dev/null)
-      echo (string replace -r "^$argv" "" "$entire")
+    function _jujutsu_bookmark_offset
+      jj log -r "closest_bookmark(@)+::@ & (~empty())" -T '"n"' --color=never --no-graph --ignore-working-copy 2>/dev/null | wc -c
     end
 
     function _git_ahead

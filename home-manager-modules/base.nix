@@ -61,6 +61,10 @@
           ui.paginate = "never";
           ui.default-command = "log";
 
+          revset-aliases = {
+            "closest_bookmark(to)" = "heads(::to & bookmarks())";
+          };
+
           aliases = {
             a = ["abandon"];
             d = ["describe"];
@@ -71,6 +75,7 @@
             mm = ["b" "m" "main"];
             n = ["new"];
             sq = ["squash" "-u"];
+            mb = ["bookmark" "move" "--from" "closest_bookmark(@-)"];
           };
         }
         // lib.optionalAttrs
