@@ -110,7 +110,52 @@
         };
 
         # Set the light to the same state as some input.
-        set-light-to = {
+        set-light-to-daylight = {
+          input_entity_id,
+          light_level_entity_id,
+          target,
+        }: {
+          choose = [
+            {
+              conditions = [
+                {
+                  condition = "state";
+                  entity_id = input_entity_id;
+                  state = "on";
+                }
+                {
+                  condition = "numeric_state";
+                  entity_id = light_level_entity_id;
+                  below = 1.5;
+                }
+              ];
+              sequence = [
+                {
+                  action = "light.turn_on";
+                  inherit target;
+                }
+              ];
+            }
+            {
+              conditions = [
+                {
+                  condition = "state";
+                  entity_id = input_entity_id;
+                  state = "off";
+                }
+              ];
+              sequence = [
+                {
+                  action = "light.turn_off";
+                  inherit target;
+                }
+              ];
+            }
+          ];
+        };
+
+        # Set the light to the same state as some input with color.
+        set-light-to-color = {
           input_entity_id,
           target,
           color,
@@ -227,7 +272,7 @@
             }
           ];
           actions = [
-            (set-light-to {
+            (set-light-to-color {
               input_entity_id = "input_boolean.computer_lights_toggle";
               target = {entity_id = "light.state_2_light";};
               color = [255 120 20];
@@ -263,7 +308,7 @@
             }
           ];
           actions = [
-            (set-light-to {
+            (set-light-to-color {
               input_entity_id = "binary_sensor.computer_case_power_led";
               target = {entity_id = "light.state_1_light";};
               color = [255 0 0];
@@ -299,10 +344,30 @@
             }
           ];
           actions = [
-            (set-light-to {
+            (set-light-to-color {
               input_entity_id = "switch.heating_switch";
               target = {entity_id = "light.state_5_light";};
               color = [255 255 0];
+            })
+          ];
+        }
+
+        # Presence sensor downstairs
+        {
+          alias = "Light entry";
+          description = "Turn on or off the light in the entry depending on a presense sensor";
+          mode = "single";
+          triggers = [
+            {
+              trigger = "state";
+              entity_id = ["binary_sensor.everything_presence_one_1_occupancy"];
+            }
+          ];
+          actions = [
+            (set-light-to-daylight {
+              input_entity_id = "binary_sensor.everything_presence_one_1_occupancy";
+              light_level_entity_id = "sensor.everything_presence_one_1_illuminance";
+              target = {entity_id = "light.chill_room_lamp_left";};
             })
           ];
         }
