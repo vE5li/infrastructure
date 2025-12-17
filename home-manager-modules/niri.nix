@@ -73,7 +73,7 @@ in {
         input.keyboard.xkb.layout = "de";
 
         layout = {
-          gaps = 4;
+          gaps = 18;
           center-focused-column = "never";
 
           default-column-width.proportion = 1. / 3.;
