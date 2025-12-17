@@ -14,15 +14,6 @@
         default = [];
       };
     };
-    grub = {
-      efi-support = mkEnableOption {
-        default = true;
-      };
-      resolution = mkOption {
-        type = types.str;
-        default = "1920x1080";
-      };
-    };
     host-name = mkOption {
       type = types.str;
     };
@@ -50,18 +41,6 @@
 
     # Allow non-FOSS packages.
     nixpkgs.config.allowUnfree = true;
-
-    boot.loader = {
-      efi.canTouchEfiVariables = grub.efi-support;
-      grub = {
-        enable = true;
-        devices = ["nodev"];
-        efiSupport = grub.efi-support;
-        gfxmodeBios = grub.resolution;
-      };
-      # Give the user some extra time to select a boot option
-      timeout = 10;
-    };
 
     environment.systemPackages = with pkgs; [
       nix-index

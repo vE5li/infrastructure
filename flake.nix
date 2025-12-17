@@ -2,7 +2,9 @@
   description = "My home infrastructure";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs = {
+      url = "github:NixOS/nixpkgs/nixos-unstable";
+    };
 
     colmena = {
       url = "github:zhaofengli/colmena";
@@ -227,6 +229,7 @@
         # NixOS modules and config
         imports = [
           ./hardware-configuration/computer.nix
+          ./nixos-modules/grub.nix
           ./nixos-modules/base.nix
           ./nixos-modules/lan-pam.nix
           ./nixos-modules/ssh-agent.nix
@@ -298,6 +301,7 @@
         # NixOS modules and config
         imports = [
           ./hardware-configuration/laptop.nix
+          ./nixos-modules/grub.nix
           ./nixos-modules/base.nix
           ./nixos-modules/lan-pam.nix
           ./nixos-modules/ssh-agent.nix
@@ -367,6 +371,7 @@
         # NixOS modules and config
         imports = [
           ./hardware-configuration/steam-deck.nix
+          ./nixos-modules/grub.nix
           ./nixos-modules/base.nix
           ./nixos-modules/lan-pam.nix
           ./nixos-modules/ssh-agent.nix
@@ -441,6 +446,7 @@
         # NixOS modules and config
         imports = [
           ./hardware-configuration/korangar-rathena.nix
+          ./nixos-modules/grub.nix
           ./nixos-modules/base.nix
           rathena.nixosModules."x86_64-linux".default
         ];
@@ -477,6 +483,7 @@
         # NixOS modules and config
         imports = [
           ./hardware-configuration/gateway.nix
+          ./nixos-modules/grub.nix
           ./nixos-modules/base.nix
           ./nixos-modules/yggdrasil.nix
         ];
@@ -533,6 +540,7 @@
         # NixOS modules and config
         imports = [
           ./hardware-configuration/vault.nix
+          ./nixos-modules/grub.nix
           ./nixos-modules/base.nix
           ./nixos-modules/lan-pam.nix
           ./nixos-modules/caddy.nix
@@ -577,6 +585,7 @@
         # NixOS modules and config
         imports = [
           ./hardware-configuration/central.nix
+          ./nixos-modules/grub.nix
           ./nixos-modules/base.nix
           ./nixos-modules/lan-pam.nix
           ./nixos-modules/ssh-agent.nix
@@ -753,6 +762,7 @@
         # NixOS modules and config
         imports = [
           ./hardware-configuration/dummy.nix
+          ./nixos-modules/grub.nix
           ./nixos-modules/base.nix
           ./nixos-modules/lan-pam.nix
         ];
