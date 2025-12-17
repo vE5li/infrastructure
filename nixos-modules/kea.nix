@@ -39,11 +39,10 @@
           ];
 
           # Static IP addresses.
-          reservations = (
-            map
-            (device: {inherit (device) hw-address ip-address;})
-            (builtins.filter (device: device.hw-address != null) config.role-configuration.devices)
-          );
+          reservations =
+            config.role-configuration.devices
+            |> builtins.filter (device: device.hw-address != null)
+            |> map (device: {inherit (device) hw-address ip-address;});
         }
       ];
     };

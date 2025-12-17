@@ -45,3 +45,8 @@ I am also running some [Yggdrasil](https://github.com/yggdrasil-network/yggdrasi
 
 The heart of my infrastructure is my central server.
 It acts as a DNS and DHCP server and hosts a couple of services for things like network storage and home automation.
+
+### Notable
+
+- All my Linux machines are set up for a single user account
+- I'm using the experimental Nix pipe operator (`|>`).

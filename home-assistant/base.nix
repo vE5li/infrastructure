@@ -46,9 +46,11 @@
   };
 
   to-yaml = configuration:
-    builtins.replaceStrings [(toString ssid-secret)] ["!secret wifi_name"]
-    (builtins.replaceStrings [(toString password-secret)] ["!secret wifi_password"]
-      (lib.generators.toYAML {} (lib.recursiveUpdate base-configuration configuration)));
+    configuration
+    |> lib.recursiveUpdate base-configuration
+    |> lib.generators.toYAML {}
+    |> builtins.replaceStrings [(toString password-secret)] ["!secret wifi_password"]
+    |> builtins.replaceStrings [(toString ssid-secret)] ["!secret wifi_name"];
 in {
   build = configuration: {
     home.packages = make-packages configuration;

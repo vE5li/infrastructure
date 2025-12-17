@@ -49,7 +49,8 @@
           grouped = builtins.groupBy (device: device.ip-address) unchecked-home-devices;
           duplicates = lib.filterAttrs (_: devices: builtins.length devices > 1) grouped;
           error-message =
-            lib.concatMapAttrsStringSep "\n" (ip-address: device: "Dulplicate IP for devices ${builtins.concatStringsSep ", " (map (device: device.name) device)}: ${ip-address}") duplicates;
+            duplicates
+            |> lib.concatMapAttrsStringSep "\n" (ip-address: device: "Dulplicate IP for devices ${builtins.concatStringsSep ", " (map (device: device.name) device)}: ${ip-address}");
 
           # Assert that there are no duplicates.
           home-devices =
@@ -58,13 +59,18 @@
             else throw error-message;
 
           # Subdomains
-          subdomains = lib.flatten (map
-            (device: (map (subdomain: {
-                inherit (device) ip-address;
-                domain = "${subdomain}.${domain}";
-              })
-              device.subdomains))
-            home-devices);
+          subdomains =
+            home-devices
+            |> map
+            (
+              device:
+                device.subdomains
+                |> map (subdomain: {
+                  inherit (device) ip-address;
+                  domain = "${subdomain}.${domain}";
+                })
+            )
+            |> lib.flatten;
         in
           []
           # IP records for local devices (e.g. `foo.home.` -> `192.168.188.30`).

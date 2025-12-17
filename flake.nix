@@ -164,10 +164,14 @@
     device-list = builtins.attrValues devices;
 
     authorized-keys =
-      map (device: device.ssh-key) (builtins.filter (device: builtins.hasAttr "ssh-key" device) device-list);
+      device-list
+      |> builtins.filter (device: builtins.hasAttr "ssh-key" device)
+      |> map (device: device.ssh-key);
 
     suggested-for-device = host-name:
-      map (device: "${device.user-name}@${device.host-name}") (builtins.filter (device: device.host-name != host-name) device-list);
+      device-list
+      |> builtins.filter (device: device.host-name != host-name)
+      |> map (device: "${device.user-name}@${device.host-name}");
   in {
     formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.alejandra;
 
