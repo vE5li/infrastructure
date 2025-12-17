@@ -121,64 +121,53 @@
       "tcp://${central-ip-address}:${toString yggdrasil-port}"
     ];
 
+    deployment-key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPsVnmAVW/35Yk/kiSj5E9nCL88a+te1lO/pJgnpj8L7 lucas@central";
+
     devices = {
       computer = {
         user-name = "lucas";
-        ssh-key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAOm6N5yWnfKUMWRcElG10ZUyLHZhNX4FMehU0uJxuQE lucas@computer";
         host-name = "computer";
-        trusted = true;
+        ssh-key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA9oly/zJdXHd2DWBnyLd0+I3kCTFANJwqxMwS4ZbaRZ lucas@computer";
       };
       laptop = {
         user-name = "lucas";
-        ssh-key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPeSt7pGQH4h5Pm4DJO7S3BXkOHLl6PoKeRvC9bdY5DT lucas@laptop";
         host-name = "laptop";
-        trusted = true;
+        ssh-key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDFHaa1wEN2qVKUZjuaoWZun38HhXVR3Z4vRIBfX4ggw lucas@laptop";
       };
       steam-deck = {
         user-name = "lucas";
-        ssh-key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILU1EGDrMsYg09X24K2oHi8Crr7PrXPtbH3Re4Qi4k+o lucas@steam-deck";
         host-name = "steam-deck";
-        trusted = true;
+        ssh-key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOi+cyycCAHeY6k+eZla1k28uBRrlPUUTleuj9ywGmzH lucas@steam-deck";
       };
       korangar-rathena = {
         user-name = "lucas";
-        ssh-key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICcNaK4heuRKxBQ++REx9rEaiwBOtLobLqu2RX5MCCOq lucas@korangar-rathena";
         host-name = "korangar-rathena";
-        trusted = false;
       };
       gateway = {
         user-name = "lucas";
-        ssh-key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINK/7vU/BBT6aVgzljcUBBY/KtacoCVegAEVoN31nDG6 lucas@gateway";
         host-name = "gateway";
-        trusted = false;
       };
       vault = {
         user-name = "lucas";
-        ssh-key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOypwGwCKpST3dRAQJOXyEChuZ6cyoYqx0qZDchMGdd4 lucas@vault";
         host-name = "vault";
-        trusted = false;
       };
       central = {
         user-name = "lucas";
-        ssh-key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINxrVu1aTI1If3xBIdCtnOm7z7+KCyWBUfFai9iH9WO5 ve5li@tuta.io";
         host-name = "central";
-        trusted = false;
       };
       dummy = {
         user-name = "lucas";
-        ssh-key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGzHmDAD4PqG7Wl0DaO7CKgpY6TXlbUzyEbQ7gCboV69 lucas@nixos";
         host-name = "dummy";
-        trusted = false;
       };
     };
 
     device-list = builtins.attrValues devices;
 
-    suggested-for-device = host-name:
-      map (device: "${device.user-name}@${device.host-name}${pkgs.lib.optionalString device.trusted ".yggdrasil"}") (builtins.filter (device: device.host-name != host-name) device-list);
+    authorized-keys =
+      map (device: device.ssh-key) (builtins.filter (device: builtins.hasAttr "ssh-key" device) device-list);
 
-    authorized-keys-for-device = host-name:
-      map (device: device.ssh-key) (builtins.filter (device: device.host-name != host-name && device.trusted) device-list);
+    suggested-for-device = host-name:
+      map (device: "${device.user-name}@${device.host-name}") (builtins.filter (device: device.host-name != host-name) device-list);
   in {
     formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.alejandra;
 
@@ -236,6 +225,7 @@
           ./hardware-configuration/computer.nix
           ./nixos-modules/base.nix
           ./nixos-modules/lan-pam.nix
+          ./nixos-modules/ssh-agent.nix
           ./nixos-modules/yggdrasil.nix
           ./nixos-modules/udev-embedded.nix
           ./nixos-modules/audio.nix
@@ -252,12 +242,16 @@
         ];
 
         role-configuration = {
-          inherit host-name user-name;
+          inherit host-name user-name deployment-key;
           grub.resolution = "3840x1080";
-          deployment-key = devices.central.ssh-key;
+
+          ssh-agent = {
+            key = "/home/${user-name}/.ssh/id_ed25519";
+            passphrase = ./secrets/computer-ssh-key-passphrase.age;
+          };
 
           yggdrasil = {
-            private-key = ./secrets/computer-yggdrasil-private-key.age;
+            private-key = ./secrets/computer-yggdrasil-private-key.hjson.age;
             peers = central-yggdrasil-peer;
           };
         };
@@ -302,6 +296,7 @@
           ./hardware-configuration/laptop.nix
           ./nixos-modules/base.nix
           ./nixos-modules/lan-pam.nix
+          ./nixos-modules/ssh-agent.nix
           ./nixos-modules/yggdrasil.nix
           ./nixos-modules/udev-embedded.nix
           ./nixos-modules/audio.nix
@@ -317,11 +312,15 @@
         ];
 
         role-configuration = {
-          inherit host-name user-name;
-          deployment-key = devices.central.ssh-key;
+          inherit host-name user-name deployment-key;
+
+          ssh-agent = {
+            key = "/home/${user-name}/.ssh/id_ed25519";
+            passphrase = ./secrets/laptop-ssh-key-passphrase.age;
+          };
 
           yggdrasil = {
-            private-key = ./secrets/laptop-yggdrasil-private-key.age;
+            private-key = ./secrets/laptop-yggdrasil-private-key.hjson.age;
             peers = central-yggdrasil-peer;
           };
         };
@@ -366,6 +365,7 @@
           ./hardware-configuration/steam-deck.nix
           ./nixos-modules/base.nix
           ./nixos-modules/lan-pam.nix
+          ./nixos-modules/ssh-agent.nix
           ./nixos-modules/yggdrasil.nix
           ./nixos-modules/audio.nix
           ./nixos-modules/niri.nix
@@ -377,11 +377,15 @@
         ];
 
         role-configuration = {
-          inherit host-name user-name;
-          deployment-key = devices.central.ssh-key;
+          inherit host-name user-name deployment-key;
+
+          ssh-agent = {
+            key = "/home/${user-name}/.ssh/id_ed25519";
+            passphrase = ./secrets/steam-deck-ssh-key-passphrase.age;
+          };
 
           yggdrasil = {
-            private-key = ./secrets/steam-deck-yggdrasil-private-key.age;
+            private-key = ./secrets/steam-deck-yggdrasil-private-key.hjson.age;
             peers = central-yggdrasil-peer;
           };
         };
@@ -438,9 +442,7 @@
         ];
 
         role-configuration = {
-          inherit host-name user-name;
-          deployment-key = devices.central.ssh-key;
-          authorized-keys = authorized-keys-for-device host-name;
+          inherit host-name user-name deployment-key authorized-keys;
           grub.efi-support = false;
         };
 
@@ -476,13 +478,11 @@
         ];
 
         role-configuration = {
-          inherit host-name user-name;
-          deployment-key = devices.central.ssh-key;
-          authorized-keys = authorized-keys-for-device host-name;
+          inherit host-name user-name deployment-key authorized-keys;
           grub.efi-support = false;
 
           yggdrasil = {
-            private-key = ./secrets/gateway-yggdrasil-private-key.age;
+            private-key = ./secrets/gateway-yggdrasil-private-key.hjson.age;
             public-keys = [
               # Central
               "85084e044c11649d6bf7c7715efa80f274b2ec3298cb868756e21d0b0a2b0559"
@@ -536,8 +536,7 @@
         ];
 
         role-configuration = {
-          inherit host-name user-name;
-          deployment-key = devices.central.ssh-key;
+          inherit host-name user-name deployment-key;
 
           domain = "0x0c.dev";
         };
@@ -576,6 +575,7 @@
           ./hardware-configuration/central.nix
           ./nixos-modules/base.nix
           ./nixos-modules/lan-pam.nix
+          ./nixos-modules/ssh-agent.nix
           ./nixos-modules/router.nix
           ./nixos-modules/yggdrasil.nix
           ./nixos-modules/unifi.nix
@@ -604,8 +604,13 @@
           # DHCP
           dhcp-pool = "192.168.188.10 - 192.168.188.200";
 
+          ssh-agent = {
+            key = "/home/${user-name}/.ssh/id_ed25519";
+            passphrase = ./secrets/central-ssh-key-passphrase.age;
+          };
+
           yggdrasil = {
-            private-key = ./secrets/central-yggdrasil-private-key.age;
+            private-key = ./secrets/central-yggdrasil-private-key.hjson.age;
             peers = ["tcp://${gateway-ip-address}:${toString yggdrasil-port}"];
             port = yggdrasil-port;
           };
@@ -749,8 +754,7 @@
         ];
 
         role-configuration = {
-          inherit host-name user-name;
-          deployment-key = devices.central.ssh-key;
+          inherit host-name user-name deployment-key;
         };
 
         # home-manager modules and config

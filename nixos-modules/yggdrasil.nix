@@ -27,11 +27,11 @@ in {
   };
 
   config = with config.role-configuration.yggdrasil; {
-    age.secrets.yggdrasil-private-key.file = private-key;
+    age.secrets."yggdrasil-private-key.hjson".file = private-key;
 
     services.yggdrasil = {
       enable = true;
-      configFile = config.age.secrets.yggdrasil-private-key.path;
+      configFile = config.age.secrets."yggdrasil-private-key.hjson".path;
       settings = {
         Peers = peers;
         Listen = lib.mkIf listen [
