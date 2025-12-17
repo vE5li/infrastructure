@@ -32,6 +32,40 @@ in {
     ];
   };
 
+  # For the root account: Validate all account requests using LAN-PAM.
+  #
+  # As a result deploying using colmena also requires this, regardless of the authorized keys.
+  security.pam.services.sshd.rules.account.lan-pam-root = {
+    enable = true;
+    control = "[success=1 default=ignore]";
+    order = config.security.pam.services.sshd.rules.account.lan-pam.order - 1;
+    modulePath = "${config.security.pam.package}/lib/security/pam_succeed_if.so";
+    args = ["user" "!=" "root"];
+  };
+  security.pam.services.sshd.rules.account.lan-pam = {
+    enable = true;
+    control = "[success=done default=bad]";
+    order = config.security.pam.services.sshd.rules.account.unix.order - 1;
+    modulePath = "${config.security.pam.package}/lib/security/pam_exec.so";
+    args = [
+      "debug"
+      "quiet"
+      "log=/var/run/lan-pam.log"
+      "${lib.getExe lan-pam.packages.${pkgs.stdenv.hostPlatform.system}.default}"
+      "${configuration-file}"
+    ];
+  };
+
+  # For the user accounts: Validate all auth requests using LAN-PAM.
+  #
+  # Root requests are skipped so logging in as root doesn't require two LAN-PAM requests.
+  security.pam.services.sshd.rules.auth.lan-pam-user = {
+    enable = true;
+    control = "[success=1 default=ignore]";
+    order = config.security.pam.services.sshd.rules.auth.lan-pam.order - 1;
+    modulePath = "${config.security.pam.package}/lib/security/pam_succeed_if.so";
+    args = ["user" "=" "root"];
+  };
   security.pam.services.sshd.rules.auth.lan-pam = {
     enable = true;
     control = "sufficient";
