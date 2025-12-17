@@ -89,9 +89,4 @@
       };
     };
   };
-
-  # FIX: For some reason dunst does not create a service.
-  programs.niri.settings.spawn-at-startup = [
-    {argv = [(lib.getExe config.services.dunst.package)];}
-  ];
 }
