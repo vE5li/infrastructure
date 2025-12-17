@@ -8,10 +8,6 @@
       description = "IP address of this device";
       type = types.str;
     };
-    domain = mkOption {
-      description = "Domain of this network";
-      type = types.str;
-    };
     subnet = mkOption {
       description = "Network submask";
       type = types.str;

@@ -538,6 +538,8 @@
         role-configuration = {
           inherit host-name user-name;
           deployment-key = devices.central.ssh-key;
+
+          domain = "0x0c.dev";
         };
 
         # home-manager modules and config
