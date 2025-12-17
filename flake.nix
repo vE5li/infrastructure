@@ -62,7 +62,7 @@
     };
 
     jovian-nixos = {
-      url = "github:Jovian-Experiments/Jovian-NixOS/f6483fb735869c01592db599c767fa77177bb3ad";
+      url = "github:Jovian-Experiments/Jovian-NixOS/bd96a083c5a5b51b67895da5f0523cd695fb87f8";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
