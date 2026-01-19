@@ -28,11 +28,9 @@
   };
 
   configuration-file = pkgs.writeText "config.json" (lib.strings.toJSON configuration);
-in {
-  security.pam.services.login.rules.auth.lan-pam = {
+
+  pam-exec-base = {
     enable = true;
-    control = "sufficient";
-    order = config.security.pam.services.login.rules.auth.unix-early.order - 1;
     modulePath = "${config.security.pam.package}/lib/security/pam_exec.so";
     args = [
       "debug"
@@ -42,66 +40,56 @@ in {
       "${configuration-file}"
     ];
   };
+
+  pam-succeed-base = {
+    enable = true;
+    control = "[success=1 default=ignore]";
+    modulePath = "${config.security.pam.package}/lib/security/pam_succeed_if.so";
+  };
+in {
+  security.pam.services.login.rules.auth.lan-pam =
+    pam-exec-base
+    // {
+      control = "sufficient";
+      order = config.security.pam.services.login.rules.auth.unix-early.order - 1;
+    };
 
   # For the root account: Validate all account requests using LAN-PAM.
   #
   # As a result deploying using colmena also requires this, regardless of the authorized keys.
-  security.pam.services.sshd.rules.account.lan-pam-root = {
-    enable = true;
-    control = "[success=1 default=ignore]";
-    order = config.security.pam.services.sshd.rules.account.lan-pam.order - 1;
-    modulePath = "${config.security.pam.package}/lib/security/pam_succeed_if.so";
-    args = ["user" "!=" "root"];
-  };
-  security.pam.services.sshd.rules.account.lan-pam = {
-    enable = true;
-    control = "[success=done default=bad]";
-    order = config.security.pam.services.sshd.rules.account.unix.order - 1;
-    modulePath = "${config.security.pam.package}/lib/security/pam_exec.so";
-    args = [
-      "debug"
-      "quiet"
-      "log=/var/run/lan-pam.log"
-      "${lib.getExe lan-pam.packages.${pkgs.stdenv.hostPlatform.system}.default}"
-      "${configuration-file}"
-    ];
-  };
+  security.pam.services.sshd.rules.account.lan-pam-root =
+    pam-succeed-base
+    // {
+      order = config.security.pam.services.sshd.rules.account.lan-pam.order - 1;
+      args = ["user" "!=" "root"];
+    };
+  security.pam.services.sshd.rules.account.lan-pam =
+    pam-exec-base
+    // {
+      control = "[success=done default=bad]";
+      order = config.security.pam.services.sshd.rules.account.unix.order - 1;
+    };
 
   # For the user accounts: Validate all auth requests using LAN-PAM.
   #
   # Root requests are skipped so logging in as root doesn't require two LAN-PAM requests.
-  security.pam.services.sshd.rules.auth.lan-pam-user = {
-    enable = true;
-    control = "[success=1 default=ignore]";
-    order = config.security.pam.services.sshd.rules.auth.lan-pam.order - 1;
-    modulePath = "${config.security.pam.package}/lib/security/pam_succeed_if.so";
-    args = ["user" "=" "root"];
-  };
-  security.pam.services.sshd.rules.auth.lan-pam = {
-    enable = true;
-    control = "sufficient";
-    order = config.security.pam.services.sshd.rules.auth.unix.order - 1;
-    modulePath = "${config.security.pam.package}/lib/security/pam_exec.so";
-    args = [
-      "debug"
-      "quiet"
-      "log=/var/run/lan-pam.log"
-      "${lib.getExe lan-pam.packages.${pkgs.stdenv.hostPlatform.system}.default}"
-      "${configuration-file}"
-    ];
-  };
+  security.pam.services.sshd.rules.auth.lan-pam-user =
+    pam-succeed-base
+    // {
+      order = config.security.pam.services.sshd.rules.auth.lan-pam.order - 1;
+      args = ["user" "=" "root"];
+    };
+  security.pam.services.sshd.rules.auth.lan-pam =
+    pam-exec-base
+    // {
+      control = "sufficient";
+      order = config.security.pam.services.sshd.rules.auth.unix.order - 1;
+    };
 
-  security.pam.services.sudo.rules.auth.lan-pam = {
-    enable = true;
-    control = "sufficient";
-    order = config.security.pam.services.sudo.rules.auth.unix.order - 1;
-    modulePath = "${config.security.pam.package}/lib/security/pam_exec.so";
-    args = [
-      "debug"
-      "quiet"
-      "log=/var/run/lan-pam.log"
-      "${lib.getExe lan-pam.packages.${pkgs.stdenv.hostPlatform.system}.default}"
-      "${configuration-file}"
-    ];
-  };
+  security.pam.services.sudo.rules.auth.lan-pam =
+    pam-exec-base
+    // {
+      control = "sufficient";
+      order = config.security.pam.services.sudo.rules.auth.unix.order - 1;
+    };
 }
