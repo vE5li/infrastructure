@@ -15,6 +15,7 @@
         access-control = [
           "127.0.0.1 allow"
           "${config.role-configuration.subnet} allow"
+          "${config.role-configuration.wireguard-subnet} allow"
         ];
 
         # Number of threads to create to serve clients.
@@ -32,6 +33,7 @@
         # Local zones.
         local-zone = [
           ''"home." static''
+          ''"wireguard." static''
           ''"yggdrasil." static''
         ];
 
@@ -41,6 +43,9 @@
 
           # Devices with a local IPv4 address.
           unchecked-home-devices = builtins.filter (device: device.ip-address != null) devices;
+
+          # WireGuard devices.
+          wireguard-devices = builtins.filter (device: device.wireguard-address != null) devices;
 
           # Yggdrasil devices.
           yggdrasil-devices = builtins.filter (device: device.yggdrasil-address != null) devices;
@@ -77,6 +82,8 @@
           ++ (map (device: ''"${device.name}.home. IN A ${device.ip-address}"'') home-devices)
           # IP records for devices name (e.g. `foo.` -> `192.168.188.30`).
           ++ (map (device: ''"${device.name}. IN A ${device.ip-address}"'') home-devices)
+          # IP records for WireGuard (e.g. `foo.wireguard.` -> `10.0.0.1`).
+          ++ (map (device: ''"${device.name}.wireguard. IN A ${device.wireguard-address}"'') wireguard-devices)
           # IP records for Yggdrasil (e.g. `foo.yggdrasil.` -> `200:4768:2984:14a7:ae0f:74d6:e4a9:8ef0`).
           ++ (map (device: ''"${device.name}.yggdrasil. IN AAAA ${device.yggdrasil-address}"'') yggdrasil-devices)
           # IP records for Subdomains (e.g. `nextcloud.domain.com.` -> `192.168.188.30`).

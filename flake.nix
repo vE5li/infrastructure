@@ -115,14 +115,6 @@
       overlays = [rathena.overlays.default];
     };
 
-    central-ip-address = "192.168.188.10";
-    gateway-ip-address = "167.235.247.100";
-
-    yggdrasil-port = 1660;
-    central-yggdrasil-peer = [
-      "tcp://${central-ip-address}:${toString yggdrasil-port}"
-    ];
-
     deployment-key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPsVnmAVW/35Yk/kiSj5E9nCL88a+te1lO/pJgnpj8L7 lucas@central";
 
     devices = {
@@ -174,6 +166,30 @@
       device-list
       |> builtins.filter (device: device.host-name != host-name)
       |> map (device: "${device.user-name}@${device.host-name}");
+
+    central-ip-address = "192.168.188.10";
+    gateway-ip-address = "167.235.247.100";
+
+    wireguard-port = 51820;
+
+    gateway-wireguard-public-key = "u/Y0ZdoC7LQrmipMe8Ny38w7wdiLu1g3D+to+L+I4Vc=";
+    gateway-wireguard-peer = {
+      ${gateway-wireguard-public-key} = {
+        endpoint = "${gateway-ip-address}:${toString wireguard-port}";
+        allowed-ips = "0.0.0.0/0";
+        persistent-keepalive = 25;
+      };
+    };
+
+    phone-ip-address = "192.168.188.12";
+    phone-wireguard-address = "10.0.0.1";
+    laptop-wireguard-address = "10.0.0.2";
+    steam-deck-wireguard-address = "10.0.0.3";
+
+    yggdrasil-port = 1660;
+    central-yggdrasil-peer = [
+      "tcp://${central-ip-address}:${toString yggdrasil-port}"
+    ];
   in {
     formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.alejandra;
 
@@ -198,7 +214,9 @@
           niri.nixosModules.niri
         ];
 
-        _module.args = {inherit lan-pam;};
+        _module.args = {
+          inherit lan-pam phone-ip-address phone-wireguard-address;
+        };
 
         home-manager = {
           useGlobalPkgs = true;
@@ -295,7 +313,7 @@
       laptop = with devices.laptop; {
         deployment = {
           tags = ["home"];
-          targetHost = "${host-name}.yggdrasil";
+          targetHost = "${host-name}.wireguard";
         };
 
         # NixOS modules and config
@@ -305,6 +323,7 @@
           ./nixos-modules/base.nix
           ./nixos-modules/lan-pam.nix
           ./nixos-modules/ssh-agent.nix
+          ./nixos-modules/wireguard.nix
           ./nixos-modules/yggdrasil.nix
           ./nixos-modules/udev-embedded.nix
           ./nixos-modules/audio.nix
@@ -325,6 +344,13 @@
           ssh-agent = {
             key = "/home/${user-name}/.ssh/id_ed25519";
             passphrase = ./secrets/laptop-ssh-key-passphrase.age;
+          };
+
+          wireguard = {
+            private-key = ./secrets/laptop-wireguard-private-key.env.age;
+            address = "${laptop-wireguard-address}/32";
+            port = wireguard-port;
+            peers = gateway-wireguard-peer;
           };
 
           yggdrasil = {
@@ -365,7 +391,7 @@
 
         deployment = {
           tags = ["home"];
-          targetHost = "${host-name}.yggdrasil";
+          targetHost = "${host-name}.wireguard";
         };
 
         # NixOS modules and config
@@ -375,6 +401,7 @@
           ./nixos-modules/base.nix
           ./nixos-modules/lan-pam.nix
           ./nixos-modules/ssh-agent.nix
+          ./nixos-modules/wireguard.nix
           ./nixos-modules/yggdrasil.nix
           ./nixos-modules/audio.nix
           ./nixos-modules/niri.nix
@@ -391,6 +418,13 @@
           ssh-agent = {
             key = "/home/${user-name}/.ssh/id_ed25519";
             passphrase = ./secrets/steam-deck-ssh-key-passphrase.age;
+          };
+
+          wireguard = {
+            private-key = ./secrets/steam-deck-wireguard-private-key.env.age;
+            address = "${steam-deck-wireguard-address}/32";
+            port = wireguard-port;
+            peers = gateway-wireguard-peer;
           };
 
           yggdrasil = {
@@ -485,6 +519,7 @@
           ./hardware-configuration/gateway.nix
           ./nixos-modules/grub.nix
           ./nixos-modules/base.nix
+          ./nixos-modules/wireguard.nix
           ./nixos-modules/yggdrasil.nix
         ];
 
@@ -492,8 +527,25 @@
           inherit host-name user-name deployment-key authorized-keys;
           grub.efi-support = false;
 
+          wireguard = {
+            private-key = ./secrets/gateway-wireguard-private-key.env.age;
+            nat-interface = "enp1s0";
+            explicit-route = "10.0.0.0/24,0.0.0.0,0";
+            trusted-interfaces = [];
+            ip-forward = true;
+            open-firewall = true;
+            port = wireguard-port;
+            peers = {
+              "wT9Q29FMrYymKiga3iZFx7N/aJcl+6G9V2KafIX2AyQ=".allowed-ips = "${central-ip-address}/24;";
+              "P1cfw4oorp+TXTVbfux2GnrJp1k3pEVlCdbchwJozmI=".allowed-ips = "${phone-wireguard-address}/32";
+              "Xsb1zCu3bjkZkzDhKbyHrHbSwMbW/PwW4Frcct/LZk8=".allowed-ips = "${laptop-wireguard-address}/32";
+              "BWefh5w+QCSHJkOwVzMxf8pPIuhMlXqL4HXuMr3zPHs=".allowed-ips = "${steam-deck-wireguard-address}/32";
+            };
+          };
+
           yggdrasil = {
             private-key = ./secrets/gateway-yggdrasil-private-key.hjson.age;
+            port = yggdrasil-port;
             public-keys = [
               # Central
               "85084e044c11649d6bf7c7715efa80f274b2ec3298cb868756e21d0b0a2b0559"
@@ -506,7 +558,6 @@
               # Daniel PC
               "e598c07f2561e874d2867e073ddebb128019176d6a7c2a8488e8df95b5e335b2"
             ];
-            port = yggdrasil-port;
           };
         };
 
@@ -590,6 +641,7 @@
           ./nixos-modules/lan-pam.nix
           ./nixos-modules/ssh-agent.nix
           ./nixos-modules/router.nix
+          ./nixos-modules/wireguard.nix
           ./nixos-modules/yggdrasil.nix
           ./nixos-modules/unifi.nix
           ./nixos-modules/docker.nix
@@ -612,6 +664,7 @@
           # Network
           domain = "0x0c.dev";
           subnet = "192.168.188.0/24";
+          wireguard-subnet = "10.0.0.0/24";
           router-ip = "192.168.188.1";
 
           # DHCP
@@ -622,10 +675,24 @@
             passphrase = ./secrets/central-ssh-key-passphrase.age;
           };
 
+          wireguard = {
+            private-key = ./secrets/central-wireguard-private-key.env.age;
+            trusted-interfaces = ["enp1s0"];
+            ip-forward = true;
+            port = wireguard-port;
+            peers = {
+              ${gateway-wireguard-public-key} = {
+                endpoint = "${gateway-ip-address}:${toString wireguard-port}";
+                allowed-ips = wireguard-subnet;
+                persistent-keepalive = 25;
+              };
+            };
+          };
+
           yggdrasil = {
             private-key = ./secrets/central-yggdrasil-private-key.hjson.age;
-            peers = ["tcp://${gateway-ip-address}:${toString yggdrasil-port}"];
             port = yggdrasil-port;
+            peers = ["tcp://${gateway-ip-address}:${toString yggdrasil-port}"];
           };
 
           # Devices with DNS entries and static DHCP rules.
@@ -658,16 +725,25 @@
               yggdrasil-address = "200:e368:5ee6:ed55:4979:2c48:f301:74c";
             }
             {
+              name = "phone";
+              ip-address = phone-ip-address;
+              hw-address = "78:53:64:06:26:DC";
+              wireguard-address = phone-wireguard-address;
+              yggdrasil-address = "201:9283:384b:e6a8:c56c:be94:db6a:fff2";
+            }
+            {
+              name = laptop.role-configuration.host-name;
+              ip-address = "192.168.188.102";
+              hw-address = "8C:F8:C5:BF:C8:6D";
+              wireguard-address = laptop-wireguard-address;
+              yggdrasil-address = "200:35c7:b144:b8c9:b220:f820:1c36:b801";
+            }
+            {
               name = steam-deck.role-configuration.host-name;
               ip-address = "192.168.188.85";
               hw-address = "14:13:33:D6:65:A1";
+              wireguard-address = steam-deck-wireguard-address;
               yggdrasil-address = "200:cdf1:2759:d689:fa95:affc:923c:929e";
-            }
-            {
-              name = "phone";
-              ip-address = "192.168.188.12";
-              hw-address = "78:53:64:06:26:DC";
-              yggdrasil-address = "201:9283:384b:e6a8:c56c:be94:db6a:fff2";
             }
             {
               name = "controller";
@@ -697,12 +773,6 @@
             {
               name = korangar-rathena.role-configuration.host-name;
               ip-address = "49.12.109.207";
-            }
-            {
-              name = laptop.role-configuration.host-name;
-              ip-address = "192.168.188.102";
-              hw-address = "8C:F8:C5:BF:C8:6D";
-              yggdrasil-address = "200:35c7:b144:b8c9:b220:f820:1c36:b801";
             }
             {
               name = "octo-print";

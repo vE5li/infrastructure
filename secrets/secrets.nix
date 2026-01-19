@@ -14,17 +14,21 @@ in {
   "computer-ssh-key-passphrase.age".publicKeys = [editor computer];
 
   # Laptop
+  "laptop-wireguard-private-key.env.age".publicKeys = [editor laptop];
   "laptop-yggdrasil-private-key.hjson.age".publicKeys = [editor laptop];
   "laptop-ssh-key-passphrase.age".publicKeys = [editor laptop];
 
   # Steam deck
+  "steam-deck-wireguard-private-key.env.age".publicKeys = [editor steam-deck];
   "steam-deck-yggdrasil-private-key.hjson.age".publicKeys = [editor steam-deck];
   "steam-deck-ssh-key-passphrase.age".publicKeys = [editor steam-deck];
 
   # Gateway
+  "gateway-wireguard-private-key.env.age".publicKeys = [editor gateway];
   "gateway-yggdrasil-private-key.hjson.age".publicKeys = [editor gateway];
 
   # Central
+  "central-wireguard-private-key.env.age".publicKeys = [editor central];
   "central-yggdrasil-private-key.hjson.age".publicKeys = [editor central];
   "central-ssh-key-passphrase.age".publicKeys = [editor central];
   "esphome-secrets.yaml.age".publicKeys = [editor central];

@@ -3,15 +3,26 @@
   config,
   lib,
   lan-pam,
+  phone-ip-address,
+  phone-wireguard-address,
   ...
 }: let
+  lan-pam-port = 4200;
+
+  phone-public-key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1SN9GdLat9NI7yhczu8DgGX0VbewMvDXWNo6+CnTCpyITXmYCzv/0GkuuCXrG3C876R9HC3f2j6PfWEsc1NWTgQyI01OqATVw5PD0eEwaH3vAmdaHXSJurXJDbg9B2XQ+L2IkPf1uWlMyxrOGlMtRSt8Zn+Tm1eitrc8K4pQp+xCYPe26vie3Rvq11l9mIHWrj7y4mdGL0ILQQ3LkQunOxgtARRIs5ZXmskAeQQIiyT5d9MTVhz6EglB7bwnVTg+Ku3o02LVC27YNNHfFtqC1TAc2y4VV9pRPuVRCHZkKQvUaHbVyQbkR0TAjd/RtC8ys/KV/zynAsNipn/gStxAMQIDAQAB";
+
   configuration = {
     source_name = config.role-configuration.host-name;
     devices = [
       {
         name = "Phone (local)";
-        ip_address = "192.168.188.12:4200";
-        public_key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1SN9GdLat9NI7yhczu8DgGX0VbewMvDXWNo6+CnTCpyITXmYCzv/0GkuuCXrG3C876R9HC3f2j6PfWEsc1NWTgQyI01OqATVw5PD0eEwaH3vAmdaHXSJurXJDbg9B2XQ+L2IkPf1uWlMyxrOGlMtRSt8Zn+Tm1eitrc8K4pQp+xCYPe26vie3Rvq11l9mIHWrj7y4mdGL0ILQQ3LkQunOxgtARRIs5ZXmskAeQQIiyT5d9MTVhz6EglB7bwnVTg+Ku3o02LVC27YNNHfFtqC1TAc2y4VV9pRPuVRCHZkKQvUaHbVyQbkR0TAjd/RtC8ys/KV/zynAsNipn/gStxAMQIDAQAB";
+        ip_address = "${phone-ip-address}:${toString lan-pam-port}";
+        public_key = phone-public-key;
+      }
+      {
+        name = "Phone (WireGuard)";
+        ip_address = "${phone-wireguard-address}:${toString lan-pam-port}";
+        public_key = phone-public-key;
       }
     ];
   };

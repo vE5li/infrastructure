@@ -12,6 +12,10 @@
       description = "Network submask";
       type = types.str;
     };
+    wireguard-subnet = mkOption {
+      description = "WireGuard submask";
+      type = types.str;
+    };
     router-ip = mkOption {
       description = "Network gateway";
       type = types.str;
@@ -35,6 +39,11 @@
           };
           hw-address = mkOption {
             description = "Hardware address of the device. Used for static DHCP entries";
+            type = types.nullOr types.str;
+            default = null;
+          };
+          wireguard-address = mkOption {
+            description = "WireGuard address of the device";
             type = types.nullOr types.str;
             default = null;
           };

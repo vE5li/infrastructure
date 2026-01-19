@@ -109,7 +109,5 @@
 
     networking.networkmanager.enable = true;
     role-configuration.user.extra-groups = ["networkmanager"];
-
-    networking.wireguard.enable = true;
   };
 }
