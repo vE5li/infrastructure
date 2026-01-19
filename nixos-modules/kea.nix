@@ -30,7 +30,7 @@
           option-data = [
             {
               name = "routers";
-              data = config.role-configuration.router-ip;
+              data = config.role-configuration.ip-address;
             }
             {
               name = "domain-name-servers";
