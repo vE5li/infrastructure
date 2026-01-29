@@ -92,10 +92,11 @@ in {
         ripgrep
       ]
       ++ lib.optional config.role-configuration.neovim.include-language-servers [
-        pkgs.lua-language-server
+        lua-language-server
         kotlin-language-server
         typescript-language-server
         nil
+        terraform-ls
         # Python with LSP.
         (pkgs.python3.withPackages (ps: with ps; [python-lsp-server]))
       ]);

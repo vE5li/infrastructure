@@ -91,6 +91,7 @@ local function config()
         "kotlin_language_server",
         "pylsp",
         "lua_ls",
+        "terraformls",
     })
 end
 
