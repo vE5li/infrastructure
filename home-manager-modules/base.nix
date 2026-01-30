@@ -72,7 +72,6 @@
             e = ["edit" "--ignore-immutable"];
             f = ["git" "fetch" "--all-remotes"];
             gp = ["git" "push"];
-            mm = ["b" "m" "main"];
             n = ["new"];
             sq = ["squash" "-u"];
             mb = ["bookmark" "move" "--from" "closest_bookmark(@-)"];
