@@ -185,6 +185,7 @@
     phone-wireguard-address = "10.0.0.1";
     laptop-wireguard-address = "10.0.0.2";
     steam-deck-wireguard-address = "10.0.0.3";
+    sylvie-phone-wireguard-address = "10.0.0.20";
 
     yggdrasil-port = 1660;
     central-yggdrasil-peer = [
@@ -540,6 +541,7 @@
               "P1cfw4oorp+TXTVbfux2GnrJp1k3pEVlCdbchwJozmI=".allowed-ips = "${phone-wireguard-address}/32";
               "Xsb1zCu3bjkZkzDhKbyHrHbSwMbW/PwW4Frcct/LZk8=".allowed-ips = "${laptop-wireguard-address}/32";
               "BWefh5w+QCSHJkOwVzMxf8pPIuhMlXqL4HXuMr3zPHs=".allowed-ips = "${steam-deck-wireguard-address}/32";
+              "jNJF/FzIhcLWEw70ZEgSHn5huZzyNedWvarvwOp2TTw=".allowed-ips = "${sylvie-phone-wireguard-address}/32";
             };
           };
 
@@ -744,6 +746,12 @@
               hw-address = "14:13:33:D6:65:A1";
               wireguard-address = steam-deck-wireguard-address;
               yggdrasil-address = "200:cdf1:2759:d689:fa95:affc:923c:929e";
+            }
+            {
+              name = "sylvie-phone";
+              ip-address = "192.168.188.90";
+              hw-address = "AA:D9:86:3C:00:C8";
+              wireguard-address = sylvie-phone-wireguard-address;
             }
             {
               name = "controller";

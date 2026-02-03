@@ -41,27 +41,35 @@
         local-data = let
           inherit (config.role-configuration) domain devices;
 
+          # Make sure that there are no duplicate entries.
+          check-for-duplicates = address-field: devices: let
+            error-message =
+              devices
+              |> builtins.groupBy (device: device.${address-field})
+              |> lib.filterAttrs (_: devices: builtins.length devices > 1)
+              |> lib.concatMapAttrsStringSep "\n" (address: device: "Dulplicate address ${address} for devices: ${builtins.concatStringsSep ", " (map (device: device.name) device)}");
+          in
+            if builtins.stringLength error-message == 0
+            then devices
+            else throw error-message;
+
           # Devices with a local IPv4 address.
-          unchecked-home-devices = builtins.filter (device: device.ip-address != null) devices;
+          home-devices =
+            devices
+            |> builtins.filter (device: device.ip-address != null)
+            |> check-for-duplicates "ip-address";
 
           # WireGuard devices.
-          wireguard-devices = builtins.filter (device: device.wireguard-address != null) devices;
+          wireguard-devices =
+            devices
+            |> builtins.filter (device: device.wireguard-address != null)
+            |> check-for-duplicates "wireguard-address";
 
           # Yggdrasil devices.
-          yggdrasil-devices = builtins.filter (device: device.yggdrasil-address != null) devices;
-
-          # Create an error message for duplicate IP addresses.
-          grouped = builtins.groupBy (device: device.ip-address) unchecked-home-devices;
-          duplicates = lib.filterAttrs (_: devices: builtins.length devices > 1) grouped;
-          error-message =
-            duplicates
-            |> lib.concatMapAttrsStringSep "\n" (ip-address: device: "Dulplicate IP for devices ${builtins.concatStringsSep ", " (map (device: device.name) device)}: ${ip-address}");
-
-          # Assert that there are no duplicates.
-          home-devices =
-            if builtins.stringLength error-message == 0
-            then unchecked-home-devices
-            else throw error-message;
+          yggdrasil-devices =
+            devices
+            |> builtins.filter (device: device.yggdrasil-address != null)
+            |> check-for-duplicates "yggdrasil-address";
 
           # Subdomains
           subdomains =
