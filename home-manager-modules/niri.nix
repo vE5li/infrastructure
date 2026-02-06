@@ -134,6 +134,10 @@ in {
           "Mod+J".action.focus-workspace-up = {};
           "Mod+L".action.focus-workspace-down = {};
 
+          "Mod+Y".action.set-dynamic-cast-window = {};
+          "Mod+Shift+Y".action.set-dynamic-cast-monitor = {};
+          "Mod+X".action.clear-dynamic-cast-target = {};
+
           "Mod+Shift+J".action.move-column-to-workspace-up = {};
           "Mod+Shift+L".action.move-column-to-workspace-down = {};
 
