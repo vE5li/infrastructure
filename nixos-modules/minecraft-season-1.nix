@@ -22,6 +22,20 @@
       whitelist = {
         styler1001 = "dd9df977-691b-4e97-b957-947a06d7ba89";
         bighomer70 = "fd5866e3-724e-43b3-bd13-2ee502e213f6";
+        lari_tto = "5b3e37ce-2bf2-49f6-a95c-1819c600a4ab";
+        bulls0712 = "300be6e0-b53e-434d-8bda-b024f5272f7a";
+        cg_97 = "b9eaad0d-dd56-4306-b1f4-8bca63d4e8f2";
+        SleepyWookiee = "50a06bb4-6459-411d-b69c-f3bfe852614b";
+        Kuro_97 = "3ee38717-1cde-4aaa-bf6e-9f983888b646";
+        Regod = "813dda13-0a50-4806-b2c6-75ac293361da";
+        Beliccous = "88327d38-4e3d-4726-b604-be37595ac918";
+        Akatatv = "b4ef7901-3c1b-4847-be4e-d980998d09fb";
+        Serdo = "864dd272-6926-4d62-bb32-e638bf1f1ce9";
+        MoinbinderChris = "928abd06-a3b8-4e01-9d6d-1a4230a9c923";
+        DarthIAsthma = "51e7315c-84f2-4776-9e6b-948a5dbac2f3";
+        xXSkillerProHDXx = "a7889ca8-e74d-4829-bfbd-0e76fb0538eb";
+        Crankharibo96 = "177f90f5-e4f8-4419-ab6f-dcd94c6139a9";
+        Mymofu = "7c5e2018-3412-459d-abaf-c5fc3948c697";
       };
 
       serverProperties = {
@@ -49,10 +63,10 @@
               sha512 = "sha512-8z06ptTah3l16w+BT5rIwC+WQeAZJAJEWRLdq0MmnvzGhe8U1Z/Y7lPeubb/RSFELgbh3h/RKEtCZxFATbU1Cw==";
             };
             # TODO: Remove to enable the nether and end.
-            NoDim = pkgs.fetchurl {
-              url = "https://cdn.modrinth.com/data/PL5F9WAX/versions/iZvU0GH8/NoDim-1.3.0.jar";
-              sha512 = "sha512-J3u9UYoo/mbOU9OsU9dSOsryYXOAbbBmDzPimpzHGS/zWfnrTreX9BtHTMCSkQBtSweHjQgIJAvuaVphBcIwhQ==";
-            };
+            # NoDim = pkgs.fetchurl {
+            #   url = "https://cdn.modrinth.com/data/PL5F9WAX/versions/iZvU0GH8/NoDim-1.3.0.jar";
+            #   sha512 = "sha512-J3u9UYoo/mbOU9OsU9dSOsryYXOAbbBmDzPimpzHGS/zWfnrTreX9BtHTMCSkQBtSweHjQgIJAvuaVphBcIwhQ==";
+            # };
             SimpleVoiceChat = pkgs.fetchurl {
               url = "https://cdn.modrinth.com/data/9eGKb6K1/versions/pFTZ8sqQ/voicechat-fabric-1.21.11-2.6.12.jar";
               sha512 = "sha512-r8eOPYykY/t4OwDsPUy5OP+SSfCI0Hf4zXX2yEZBng/kkWBh9XoLGIpcKFZck0YjxSET9HbmnoKuyrr/yOj9zA==";
@@ -108,6 +122,18 @@
             XaerosWorldMap = pkgs.fetchurl {
               url = "https://cdn.modrinth.com/data/NcUtCpym/versions/CkZVhVE0/xaeroworldmap-fabric-1.21.11-1.40.11.jar";
               sha512 = "sha512-PrEiJcEIJdSIfC6RWyozG+CbbqxKdczDIHZ1QskmM9EbxqimPLKyi78GLBAuTsUAANMIKJLgAygETWIlsYNvZQ==";
+            };
+            Sleep = pkgs.fetchurl {
+              url = "https://cdn.modrinth.com/data/WTzuSu8P/versions/ELwtUzes/sleep-v4.3.13.jar";
+              sha512 = "sha512-ytM1P1sviboZucpcRi1veWRQQYV6JRthg343RmGuLqL2zXrcTwcTkwfpEgYnfYKMGhtEi7N/Hy7WLNjpvABXwA==";
+            };
+            InventorySorting = pkgs.fetchurl {
+              url = "https://cdn.modrinth.com/data/5ibSyLAz/versions/Dq4h9aTH/inventorysorter-fabric-2.1.4%2Bmc1.21.11.jar";
+              sha512 = "sha512-o+qXXXanBz+Y61zLRzYOSOTOLqtEsysexyDOhw8OKWlY8X7LfBOjOXZx1jfMkuAi57bpeOTNMKLuZLCdMINYxQ==";
+            };
+            ClothConfig = pkgs.fetchurl {
+              url = "https://cdn.modrinth.com/data/9s6osm5g/versions/xuX40TN5/cloth-config-21.11.153-fabric.jar";
+              sha512 = "sha512-j0VUidS3EGnpmFaM9OFFARb0NgpOtIHNiRF/YpxogxZIhs9jygisT8kp3RPRESFSdVpiFtShSY7mQG7xAgk+UQ==";
             };
           }
         );
