@@ -316,6 +316,22 @@
           ];
         }
 
+        # Computer reset key action.
+        {
+          alias = "computer reset key action";
+          description = "Reset the computer when pressing Key3";
+          mode = "single";
+          triggers = [
+            (turned-on {entity_id = "binary_sensor.key_3";})
+          ];
+          actions = [
+            {
+              action = "button.press";
+              target = {entity_id = "button.computer_case_reset_button";};
+            }
+          ];
+        }
+
         # Heating key action.
         {
           alias = "Heating key action";

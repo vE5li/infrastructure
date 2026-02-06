@@ -15,6 +15,11 @@ in (base.build {
       pin = "GPIO5";
       id = "power_button_relay";
     }
+    {
+      platform = "gpio";
+      pin = "GPIO18";
+      id = "reset_button_relay";
+    }
   ];
 
   switch = [
@@ -32,6 +37,12 @@ in (base.build {
       platform = "output";
       name = "Power Button";
       output = "power_button_relay";
+      duration = "250ms";
+    }
+    {
+      platform = "output";
+      name = "Reset Button";
+      output = "reset_button_relay";
       duration = "250ms";
     }
   ];

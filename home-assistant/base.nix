@@ -15,6 +15,8 @@
   # HACK: to support !secret syntax. Ideally this can be solved in a nicer fashion.
   ssid-secret = 32123456789;
   password-secret = 98123456789;
+  api-secret = 67981234567;
+  ota-secret = 45679812345;
 
   base-configuration = {
     esp32 = {
@@ -28,11 +30,11 @@
 
     prometheus = {};
 
-    api.password = "";
+    api.encryption.key = api-secret;
 
     ota = {
       platform = "esphome";
-      password = "";
+      password = ota-secret;
     };
 
     wifi = {
@@ -50,7 +52,9 @@
     |> lib.recursiveUpdate base-configuration
     |> lib.generators.toYAML {}
     |> builtins.replaceStrings [(toString password-secret)] ["!secret wifi_password"]
-    |> builtins.replaceStrings [(toString ssid-secret)] ["!secret wifi_name"];
+    |> builtins.replaceStrings [(toString ssid-secret)] ["!secret wifi_name"]
+    |> builtins.replaceStrings [(toString api-secret)] ["!secret api_encryption_key"]
+    |> builtins.replaceStrings [(toString ota-secret)] ["!secret ota_password"];
 in {
   build = configuration: {
     home.packages = make-packages configuration;
