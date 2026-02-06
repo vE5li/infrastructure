@@ -37,6 +37,7 @@ in {
         http_port = 9999;
         inherit domain;
       };
+      security.secret_key = "243b6073dded8afdbca51582dc449523767780ec375aeeb2ae05f8a3680e2084";
     };
   };
 

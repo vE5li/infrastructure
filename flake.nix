@@ -65,7 +65,7 @@
     };
 
     jovian-nixos = {
-      url = "github:Jovian-Experiments/Jovian-NixOS/bd96a083c5a5b51b67895da5f0523cd695fb87f8";
+      url = "github:Jovian-Experiments/Jovian-NixOS/67d55e61fe5e4d88d3fb90c0888cfced04a0589d";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -210,8 +210,8 @@
     sylvie-phone-wireguard-address = "10.0.0.20";
 
     yggdrasil-port = 1660;
-    central-yggdrasil-peer = [
-      "tcp://${central-ip-address}:${toString yggdrasil-port}"
+    gateway-yggdrasil-peer = [
+      "tcp://${gateway-ip-address}:${toString yggdrasil-port}"
     ];
   in {
     formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.alejandra;
@@ -299,8 +299,8 @@
           };
 
           yggdrasil = {
-            private-key = ./secrets/computer-yggdrasil-private-key.hjson.age;
-            peers = central-yggdrasil-peer;
+            private-key = ./secrets/computer-yggdrasil-private-key.age;
+            peers = gateway-yggdrasil-peer;
           };
         };
 
@@ -336,7 +336,7 @@
       laptop = with devices.laptop; {
         deployment = {
           tags = ["home"];
-          targetHost = "${host-name}.wireguard";
+          targetHost = "${host-name}.yggdrasil";
         };
 
         # NixOS modules and config
@@ -377,8 +377,8 @@
           };
 
           yggdrasil = {
-            private-key = ./secrets/laptop-yggdrasil-private-key.hjson.age;
-            peers = central-yggdrasil-peer;
+            private-key = ./secrets/laptop-yggdrasil-private-key.age;
+            peers = gateway-yggdrasil-peer;
           };
         };
 
@@ -451,8 +451,8 @@
           };
 
           yggdrasil = {
-            private-key = ./secrets/steam-deck-yggdrasil-private-key.hjson.age;
-            peers = central-yggdrasil-peer;
+            private-key = ./secrets/steam-deck-yggdrasil-private-key.age;
+            peers = gateway-yggdrasil-peer;
           };
         };
 
@@ -568,11 +568,16 @@
           };
 
           yggdrasil = {
-            private-key = ./secrets/gateway-yggdrasil-private-key.hjson.age;
+            private-key = ./secrets/gateway-yggdrasil-private-key.age;
             port = yggdrasil-port;
             public-keys = [
               # Central
               "85084e044c11649d6bf7c7715efa80f274b2ec3298cb868756e21d0b0a2b0559"
+              # Computer
+              "8e4bd08c89555b4369db867f7c598334254080bb8ce6c7f1d47ea8d204dfa5b5"
+              # Laptop TODO:
+              # Steam Deck TODO:
+              # Phone: TODO:
               # Simon PC
               "b12d3901b159029248c28244dbb40b5965f7a6106464f362adf48970a400a970"
               # Jonas PC
@@ -582,6 +587,7 @@
               # Daniel PC
               "e598c07f2561e874d2867e073ddebb128019176d6a7c2a8488e8df95b5e335b2"
             ];
+            peers = ["tls://89.167.111.247:9001"];
           };
         };
 
@@ -714,9 +720,8 @@
           };
 
           yggdrasil = {
-            private-key = ./secrets/central-yggdrasil-private-key.hjson.age;
-            port = yggdrasil-port;
-            peers = ["tcp://${gateway-ip-address}:${toString yggdrasil-port}"];
+            private-key = ./secrets/central-yggdrasil-private-key.age;
+            peers = gateway-yggdrasil-peer;
           };
 
           # Devices with DNS entries and static DHCP rules.
@@ -758,7 +763,7 @@
             {
               name = laptop.role-configuration.host-name;
               ip-address = "192.168.188.102";
-              hw-address = "8C:F8:C5:BF:C8:6D";
+              hw-address = "34:FD:70:23:45:D8";
               wireguard-address = laptop-wireguard-address;
               yggdrasil-address = "200:35c7:b144:b8c9:b220:f820:1c36:b801";
             }
@@ -819,18 +824,32 @@
               hw-address = "94:B9:7E:DA:8F:64";
             }
             {
-              name = "simon-computer";
-              yggdrasil-address = "200:9da5:8dfc:9d4d:fadb:6e7a:fb76:4897";
-            }
-            {
               name = "television";
               ip-address = "192.168.188.11";
               hw-address = "A0:62:FB:14:72:E0";
             }
             {
+              name = "watch";
+              ip-address = "192.168.188.13";
+              hw-address = "00:0a:f5:3f:9e:54";
+            }
+            {
               name = dummy.role-configuration.host-name;
               ip-address = "192.168.188.99";
               hw-address = "9C:6B:00:A7:E6:FF";
+            }
+            {
+              name = "simon-computer";
+              yggdrasil-address = "200:9da5:8dfc:9d4d:fadb:6e7a:fb76:4897";
+            }
+            {
+              name = "simon-gateway";
+              ip-address = "89.167.111.247";
+              yggdrasil-address = "201:6929:eff7:f36:6860:22f7:ec8:1c8c";
+            }
+            {
+              name = "simon-beelink";
+              yggdrasil-address = "201:9325:b8bc:eccd:5415:5915:c897:f2dd";
             }
           ];
         };

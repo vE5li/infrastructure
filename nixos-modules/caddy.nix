@@ -25,8 +25,8 @@
       environmentFile = config.age.secrets."caddy.env".path;
 
       package = pkgs.caddy.withPlugins {
-        plugins = ["github.com/caddy-dns/cloudflare@v0.2.2"];
-        hash = "sha256-RLOwzx7+SH9sWVlr+gTOp5VKlS1YhoTXHV4k6r5BJ3U=";
+        plugins = ["github.com/caddy-dns/cloudflare@v0.2.4"];
+        hash = "sha256-Olz4W84Kiyldy+JtbIicVCL7dAYl4zq+2rxEOUTObxA=";
       };
 
       virtualHosts."*.${config.role-configuration.domain}".extraConfig = ''

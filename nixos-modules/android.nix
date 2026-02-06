@@ -1,7 +1,5 @@
 {pkgs, ...}: {
-  programs.adb.enable = true;
-
-  environment.systemPackages = [pkgs.android-studio];
+  environment.systemPackages = [pkgs.android-tools pkgs.android-studio];
 
   role-configuration.user.extra-groups = ["adbusers"];
 }
