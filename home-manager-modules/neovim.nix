@@ -41,7 +41,6 @@
     for _ in args:
         nvim.command('exe "edit ".remove(g:files_to_edit, 0)')
 
-
     def find_buffer(name):
         # Get a list of all buffers.
         buffers = nvim.api.list_bufs()
@@ -107,9 +106,7 @@ in {
 
     programs.neovim = {
       enable = true;
-      package = neovim.packages.${pkgs.pkgs.stdenv.hostPlatform.system}.default.overrideAttrs {
-        treesitter-parsers = {};
-      };
+      package = neovim.packages.${pkgs.pkgs.stdenv.hostPlatform.system}.default;
     };
 
     xdg.configFile."nvim/" = {
