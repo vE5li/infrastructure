@@ -81,6 +81,8 @@
 
         ipv4 =
           {
+            # TODO: Maybe we need to add something like this?
+            # dns = "192.168.188.10";
             method =
               if address == null
               then "disabled"
