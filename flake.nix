@@ -81,6 +81,13 @@
       inputs.flake-compat.follows = "flake-compat";
     };
 
+    # TODO: Remove after https://github.com/NixOS/nixpkgs/pull/447604
+    glide = {
+      url = "github:glide-browser/glide.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
+
     # Transitive dependencies to allow following
     systems = {
       url = "github:nix-systems/default-linux";
@@ -110,12 +117,14 @@
     wallpapers,
     rathena,
     jovian-nixos,
+    rust-overlay,
     nix-minecraft,
+    glide,
     ...
   }: let
     pkgs = import nixpkgs {
       system = "x86_64-linux";
-      overlays = [niri.overlays.niri];
+      overlays = [(import rust-overlay) niri.overlays.niri];
     };
 
     nixpkgs-steam-deck = {
@@ -247,7 +256,7 @@
           sharedModules = [];
 
           extraSpecialArgs = {
-            inherit neovim nix-colors cross-cursor;
+            inherit neovim nix-colors cross-cursor glide;
           };
         };
       };
@@ -313,8 +322,10 @@
             ./home-manager-modules/rofi.nix
             ./home-manager-modules/foot.nix
             ./home-manager-modules/firefox.nix
+            ./home-manager-modules/glide.nix
             ./home-manager-modules/handlr.nix
             ./home-manager-modules/dunst.nix
+            ./home-manager-modules/ai.nix
           ];
 
           role-configuration = {
@@ -391,8 +402,10 @@
             ./home-manager-modules/rofi.nix
             ./home-manager-modules/foot.nix
             ./home-manager-modules/firefox.nix
+            ./home-manager-modules/glide.nix
             ./home-manager-modules/handlr.nix
             ./home-manager-modules/dunst.nix
+            ./home-manager-modules/ai.nix
           ];
 
           role-configuration = {
@@ -465,8 +478,10 @@
             ./home-manager-modules/rofi.nix
             ./home-manager-modules/foot.nix
             ./home-manager-modules/firefox.nix
+            ./home-manager-modules/glide.nix
             ./home-manager-modules/handlr.nix
             ./home-manager-modules/dunst.nix
+            ./home-manager-modules/ai.nix
           ];
 
           role-configuration = {
@@ -496,7 +511,7 @@
         nixpkgs = nixpkgs-korangar-rathena;
 
         deployment = {
-          tags = ["korangar"];
+          tags = ["remote" "korangar"];
           targetHost = host-name;
         };
 
@@ -533,7 +548,7 @@
       #
       gateway = with devices.gateway; {
         deployment = {
-          tags = ["home"];
+          tags = ["remote"];
           targetHost = host-name;
         };
 
@@ -860,6 +875,7 @@
             ./home-manager-modules/base.nix
             ./home-assistant/controller.nix
             ./home-assistant/computer-case.nix
+            ./home-manager-modules/ai.nix
           ];
 
           role-configuration = {
@@ -880,6 +896,7 @@
         nixpkgs = nixpkgs-minecraft-season-1;
 
         deployment = {
+          tags = ["remote"];
           targetHost = host-name;
         };
 

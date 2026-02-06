@@ -1,11 +1,11 @@
 {pkgs, ...}: {
   environment.systemPackages = with pkgs; [
     wine
-    lutris
+    # lutris
     # Minecraft
     prismlauncher
     osu-lazer-bin
-    factorio
+    # factorio
   ];
 
   # Tablet for osu!

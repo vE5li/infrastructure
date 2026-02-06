@@ -73,7 +73,7 @@ in {
         input.keyboard.xkb.layout = "de";
 
         layout = {
-          gaps = 18;
+          gaps = 8;
           center-focused-column = "never";
 
           default-column-width.proportion = 1. / 3.;
@@ -94,6 +94,18 @@ in {
 
           border = {};
         };
+
+        window-rules = [
+          {
+            geometry-corner-radius = {
+              top-left = 3.0;
+              top-right = 3.0;
+              bottom-right = 3.0;
+              bottom-left = 3.0;
+            };
+            clip-to-geometry = true;
+          }
+        ];
 
         outputs."HDMI-A-1" = {
           scale = 1;

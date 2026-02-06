@@ -47,7 +47,7 @@ in {
     settings = {
       main = {
         font = "monospace:size=8";
-        line-height = 9.8;
+        line-height = 8.0;
         vertical-letter-offset = -0.5;
       };
       scrollback.lines = 5000;

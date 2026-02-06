@@ -2,6 +2,7 @@
   # https://github.com/przmv/base16-vis
   themes = with nix-colors.colorSchemes; {
     apathy = apathy;
+    ashes = ashes;
     blueforest = blueforest;
     chalk = chalk;
     cupcake = cupcake;
@@ -20,12 +21,11 @@
     rebecca = rebecca;
     savanna = atelier-savanna;
     tokyo = tokyo-city-dark;
-    ashes = ashes;
   };
 in {
   # Nix Colors
   imports = [nix-colors.homeManagerModules.default];
 
   # Selected color scheme
-  colorScheme = themes.gruvbox;
+  colorScheme = themes.ashes;
 }
