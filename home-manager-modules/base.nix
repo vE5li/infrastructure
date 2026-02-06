@@ -76,6 +76,28 @@
             sq = ["squash" "-u"];
             mb = ["bookmark" "move" "--from" "closest_bookmark(@-)"];
           };
+
+          fix.tools = {
+            rustfmt = {
+                command = ["rustfmt"];
+                patterns = ["glob:**/*.rs"];
+            };
+            taplo = {
+                command = ["taplo" "fmt" "--stdin-filepath=$path" "-"];
+                patterns = ["glob:**/*.toml"];
+            };
+            prettier = {
+              command = ["pnpm" "exec" "prettier" "--stdin-filepath=$path"];
+              patterns = [
+                "glob:**/*.js"
+                "glob:**/*.mjs"
+                "glob:**/*.cjs"
+                "glob:**/*.jsx"
+                "glob:**/*.ts"
+                "glob:**/*.tsx"
+              ];
+            };
+          };
         }
         // lib.optionalAttrs
         git.sign-commits {

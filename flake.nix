@@ -313,6 +313,33 @@
           };
         };
 
+        environment.systemPackages = let
+          rust-nightly = pkgs.rust-bin.fromRustupToolchain {
+            channel = "nightly-2026-02-01";
+            components = ["rustfmt"];
+          };
+
+          rust-nightly-fmt = pkgs.writeShellScriptBin "rust-nightly-fmt" ''
+            ${pkgs.lib.getExe' rust-nightly "cargo"} fmt --all -- \
+                --config condense_wildcard_suffixes=true \
+                --config edition=2024 \
+                --config fn_call_width=80 \
+                --config format_macro_matchers=true \
+                --config format_strings=true \
+                --config group_imports=StdExternalCrate \
+                --config hex_literal_case=Upper \
+                --config imports_granularity=Module \
+                --config max_width=140 \
+                --config overflow_delimited_expr=true \
+                --config reorder_impl_items=true \
+                --config style_edition=2024 \
+                --config use_field_init_shorthand=true \
+                --config wrap_comments=true \
+          '';
+        in [
+          rust-nightly-fmt
+        ];
+
         # home-manager modules and config
         home-manager.users.${user-name} = {
           imports = [
@@ -347,7 +374,8 @@
       laptop = with devices.laptop; {
         deployment = {
           tags = ["home"];
-          targetHost = "${host-name}.yggdrasil";
+          # targetHost = "${host-name}.yggdrasil";
+          targetHost = "${host-name}";
         };
 
         # NixOS modules and config
