@@ -102,6 +102,7 @@ in {
         binds = {
           "Mod+M".action.spawn = ["foot" "-e" "nvim-terminal"];
           "Mod+Shift+M".action.spawn = [(lib.getExe remote-terminal)];
+          "Mod+6".action.spawn = ["foot" "-e" "/home/lucas/projects/e/target/release/e"];
 
           "Mod+V".action.spawn = ["rofi" "-show" "run"];
 

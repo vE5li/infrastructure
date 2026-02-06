@@ -51,6 +51,7 @@
       zip
       unzip
       dig
+      file
     ];
 
     # Limit the amount of logs to keep.

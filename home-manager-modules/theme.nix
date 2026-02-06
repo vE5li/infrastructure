@@ -27,5 +27,5 @@ in {
   imports = [nix-colors.homeManagerModules.default];
 
   # Selected color scheme
-  colorScheme = themes.ashes;
+  colorScheme = themes.gruvbox;
 }
