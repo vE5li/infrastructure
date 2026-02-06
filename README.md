@@ -62,6 +62,9 @@ graph TD
     - Yggdrasil]
     korangar-rathena[***korangar-rathena***
     - rAthena]
+    minecraft-season-1[***minecraft-season-1***
+    - Minecraft
+    - BlueMap]
     end
 
     subgraph Local
@@ -111,6 +114,7 @@ graph TD
     gateway ---|WireGuard + Yggdrasil| steam-deck
     gateway ---|WireGuard + Yggdrasil| phone
     korangar-rathena --- central
+    minecraft-season-1 --- central
 
     central ---|Yggdrasil| computer
     central --- vault

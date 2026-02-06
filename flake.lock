@@ -45,7 +45,9 @@
     },
     "colmena": {
       "inputs": {
-        "flake-compat": "flake-compat",
+        "flake-compat": [
+          "flake-compat"
+        ],
         "flake-utils": [
           "flake-utils"
         ],
@@ -114,13 +116,12 @@
       }
     },
     "flake-compat": {
-      "flake": false,
       "locked": {
-        "lastModified": 1650374568,
-        "narHash": "sha256-Z+s0J8/r907g149rllvwhb4pKi8Wam5ij0st8PwAh+E=",
+        "lastModified": 1767039857,
+        "narHash": "sha256-vNpUSpF5Nuw8xvDLj2KCwwksIbjua2LZCqhV1LNRDns=",
         "owner": "edolstra",
         "repo": "flake-compat",
-        "rev": "b4a34015c698c7793d592d66adbab377907a2be8",
+        "rev": "5edf11c44bc78a0d334f6334cdaf7d60d732daab",
         "type": "github"
       },
       "original": {
@@ -379,6 +380,32 @@
         "type": "github"
       }
     },
+    "nix-minecraft": {
+      "inputs": {
+        "flake-compat": [
+          "flake-compat"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": [
+          "systems"
+        ]
+      },
+      "locked": {
+        "lastModified": 1772160153,
+        "narHash": "sha256-lk5IxQzY9ZeeEyjKNT7P6dFnlRpQgkus4Ekc/+slypY=",
+        "owner": "Infinidoge",
+        "repo": "nix-minecraft",
+        "rev": "deca3fb710b502ba10cd5cdc8f66c2cc184b92df",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Infinidoge",
+        "repo": "nix-minecraft",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1765472234,
@@ -421,11 +448,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1760981997,
-        "narHash": "sha256-/zeK8UWVqaGT2Kawj4p093d/hqghBK/sZfxw0SOt1YI=",
+        "lastModified": 1771106062,
+        "narHash": "sha256-e9NvEg2i6MYWTpiDCLbp0oFTwwordhdmbnt0dtX0bMo=",
         "owner": "ve5li",
         "repo": "korangar-rathena",
-        "rev": "46cf0e1abb592c2e954b3165379ffbf41fe583ba",
+        "rev": "78d3dfed233e5620c2ebe553681ba34aa08d3bd0",
         "type": "github"
       },
       "original": {
@@ -439,6 +466,7 @@
         "agenix": "agenix",
         "colmena": "colmena",
         "cross-cursor": "cross-cursor",
+        "flake-compat": "flake-compat",
         "flake-utils": "flake-utils",
         "home-manager": "home-manager",
         "jovian-nixos": "jovian-nixos",
@@ -446,6 +474,7 @@
         "neovim": "neovim",
         "niri": "niri",
         "nix-colors": "nix-colors",
+        "nix-minecraft": "nix-minecraft",
         "nixpkgs": "nixpkgs",
         "rathena": "rathena",
         "rust-overlay": "rust-overlay",
@@ -460,11 +489,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1765465581,
-        "narHash": "sha256-fCXT0aZXmTalM3NPCTedVs9xb0egBG5BOZkcrYo5PGE=",
+        "lastModified": 1771211437,
+        "narHash": "sha256-lcNK438i4DGtyA+bPXXyVLHVmJjYpVKmpux9WASa3ro=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "99cc5667eece98bb35dcf35f7e511031a8b7a125",
+        "rev": "c62195b3d6e1bb11e0c2fb2a494117d3b55d410f",
         "type": "github"
       },
       "original": {

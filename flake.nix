@@ -11,6 +11,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nix-github-actions.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
+      inputs.flake-compat.follows = "flake-compat";
     };
 
     agenix = {
@@ -68,6 +69,18 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nix-minecraft = {
+      url = "github:Infinidoge/nix-minecraft";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
+      inputs.flake-compat.follows = "flake-compat";
+    };
+
     # Transitive dependencies to allow following
     systems = {
       url = "github:nix-systems/default-linux";
@@ -78,9 +91,8 @@
       inputs.systems.follows = "systems";
     };
 
-    rust-overlay = {
-      url = "github:oxalica/rust-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
+    flake-compat = {
+      url = "github:edolstra/flake-compat";
     };
   };
 
@@ -98,6 +110,7 @@
     wallpapers,
     rathena,
     jovian-nixos,
+    nix-minecraft,
     ...
   }: let
     pkgs = import nixpkgs {
@@ -113,6 +126,11 @@
     nixpkgs-korangar-rathena = {
       system = "x86_64-linux";
       overlays = [rathena.overlays.default];
+    };
+
+    nixpkgs-minecraft-season-1 = {
+      system = "x86_64-linux";
+      overlays = [nix-minecraft.overlays.default];
     };
 
     deployment-key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPsVnmAVW/35Yk/kiSj5E9nCL88a+te1lO/pJgnpj8L7 lucas@central";
@@ -148,6 +166,10 @@
       central = {
         user-name = "lucas";
         host-name = "central";
+      };
+      minecraft-season-1 = {
+        user-name = "lucas";
+        host-name = "minecraft-season-1";
       };
       dummy = {
         user-name = "lucas";
@@ -783,6 +805,10 @@
               ip-address = "49.12.109.207";
             }
             {
+              name = minecraft-season-1.role-configuration.host-name;
+              ip-address = "49.13.115.170";
+            }
+            {
               name = "octo-print";
               ip-address = "192.168.188.80";
               hw-address = "DC:A6:32:49:D7:03";
@@ -820,6 +846,46 @@
           role-configuration = {
             inherit user-name;
             git.sign-commits = true;
+          };
+        };
+      };
+
+      #  __  __ _                            __ _                                      __
+      # |  \/  (_)                          / _| |                                    /_ |
+      # | \  / |_ _ __   ___  ___ _ __ __ _| |_| |_   ___  ___  __ _ ___  ___  _ __    | |
+      # | |\/| | | '_ \ / _ \/ __| '__/ _` |  _| __| / __|/ _ \/ _` / __|/ _ \| '_ \   | |
+      # | |  | | | | | |  __/ (__| | | (_| | | | |_  \__ \  __/ (_| \__ \ (_) | | | |  | |
+      # |_|  |_|_|_| |_|\___|\___|_|  \__,_|_|  \__| |___/\___|\__,_|___/\___/|_| |_|  |_|
+      #
+      minecraft-season-1 = with devices.minecraft-season-1; {
+        nixpkgs = nixpkgs-minecraft-season-1;
+
+        deployment = {
+          targetHost = host-name;
+        };
+
+        # NixOS modules and config
+        imports = [
+          ./hardware-configuration/minecraft-season-1.nix
+          ./nixos-modules/grub.nix
+          ./nixos-modules/base.nix
+          ./nixos-modules/docker.nix
+          nix-minecraft.nixosModules.minecraft-servers
+          ./nixos-modules/minecraft-season-1.nix
+        ];
+
+        role-configuration = {
+          inherit host-name user-name deployment-key authorized-keys;
+        };
+
+        # home-manager modules and config
+        home-manager.users.${user-name} = {
+          imports = [
+            ./home-manager-modules/base.nix
+          ];
+
+          role-configuration = {
+            inherit user-name;
           };
         };
       };
