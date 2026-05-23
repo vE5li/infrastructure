@@ -8,6 +8,8 @@
     # factorio
   ];
 
+  hardware.ckb-next.enable = true;
+
   # Tablet for osu!
   hardware.opentabletdriver.enable = true;
   boot.blacklistedKernelModules = [
