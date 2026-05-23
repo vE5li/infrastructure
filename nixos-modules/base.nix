@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  flake-self,
   ...
 }: {
   options.role-configuration = with lib; {
@@ -35,6 +36,14 @@
       "nix-command"
       "pipe-operators"
     ];
+
+    # Pin `nixpkgs` to the version pinned in this flake.
+    nix.registry.nixpkgs.flake = flake-self;
+    nix.settings.flake-registry = "";
+
+    # For running legacy commands.
+    nix.channel.enable = true;
+    nix.nixPath = ["nixpkgs=${flake-self}"];
 
     # Optimize store.
     nix.optimise.automatic = true;

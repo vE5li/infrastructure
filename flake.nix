@@ -223,7 +223,9 @@
       "tcp://${gateway-ip-address}:${toString yggdrasil-port}"
     ];
   in {
-    formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.alejandra;
+    legacyPackages.x86_64-linux = pkgs;
+
+    formatter.x86_64-linux = pkgs.alejandra;
 
     # Dev shell to make colmena and agenix available.
     # This is nicer than installing colmena on the machine because it avoids mismatches between the installed colmena version and a potential newer one.
@@ -248,6 +250,7 @@
 
         _module.args = {
           inherit lan-pam phone-ip-address phone-wireguard-address;
+          flake-self = self;
         };
 
         home-manager = {
