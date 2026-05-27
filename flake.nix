@@ -180,10 +180,6 @@
         user-name = "lucas";
         host-name = "minecraft-season-1";
       };
-      dummy = {
-        user-name = "lucas";
-        host-name = "dummy";
-      };
     };
 
     device-list = builtins.attrValues devices;
@@ -880,11 +876,6 @@
               hw-address = "00:0a:f5:3f:9e:54";
             }
             {
-              name = dummy.role-configuration.host-name;
-              ip-address = "192.168.188.99";
-              hw-address = "9C:6B:00:A7:E6:FF";
-            }
-            {
               name = "simon-computer";
               yggdrasil-address = "200:9da5:8dfc:9d4d:fadb:6e7a:fb76:4897";
             }
@@ -943,43 +934,6 @@
 
         role-configuration = {
           inherit host-name user-name deployment-key authorized-keys;
-        };
-
-        # home-manager modules and config
-        home-manager.users.${user-name} = {
-          imports = [
-            ./home-manager-modules/base.nix
-          ];
-
-          role-configuration = {
-            inherit user-name;
-          };
-        };
-      };
-
-      #    ___                             _  _
-      #   |   \   _  _    _ __    _ __    | || |
-      #   | |) | | +| |  | '  \  | '  \    \_, |
-      #   |___/   \_,_|  |_|_|_| |_|_|_|  _|__/
-      # _|"""""|_|"""""|_|"""""|_|"""""|_| """"|
-      # "`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'
-      #
-      dummy = with devices.dummy; {
-        deployment = {
-          tags = ["home"];
-          targetHost = host-name;
-        };
-
-        # NixOS modules and config
-        imports = [
-          ./hardware-configuration/dummy.nix
-          ./nixos-modules/grub.nix
-          ./nixos-modules/base.nix
-          ./nixos-modules/lan-pam.nix
-        ];
-
-        role-configuration = {
-          inherit host-name user-name deployment-key;
         };
 
         # home-manager modules and config
