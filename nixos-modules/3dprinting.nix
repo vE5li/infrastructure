@@ -2,7 +2,8 @@
   environment.systemPackages = with pkgs; [
     kicad
     freecad
-    openscad
+    # Failed to build so I commented it out for now.
+    # openscad
     prusa-slicer
   ];
 }
