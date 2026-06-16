@@ -275,7 +275,7 @@
             (set-light-to-color {
               input_entity_id = "input_boolean.computer_lights_toggle";
               target = {entity_id = "light.state_2_light";};
-              color = [255 120 20];
+              color = [0 255 240];
             })
           ];
         }
@@ -311,7 +311,7 @@
             (set-light-to-color {
               input_entity_id = "binary_sensor.computer_case_power_led";
               target = {entity_id = "light.state_1_light";};
-              color = [255 0 0];
+              color = [190 255 0];
             })
           ];
         }
@@ -332,45 +332,45 @@
           ];
         }
 
-        # Heating key action.
+        # Rust logo key action.
         {
-          alias = "Heating key action";
-          description = "Toggle the heating when pressing Key5";
+          alias = "rust logo key action";
+          description = "Toggle the rust logo when pressing Key5";
           mode = "single";
           triggers = [
             (turned-on {entity_id = "binary_sensor.key_5";})
           ];
           actions = [
             {
-              action = "switch.toggle";
-              target = {entity_id = "switch.heating_switch";};
+              action = "light.toggle";
+              target = {entity_id = "light.rust_logo";};
             }
           ];
         }
 
-        # Heating key led.
+        # Rust logo key led.
         {
-          alias = "Heating key indicator";
-          description = "Toggle the key5 LED when the heating changes state";
+          alias = "rust logo key indicator";
+          description = "Toggle the key5 LED when the rust logo changes state";
           mode = "single";
           triggers = [
             {
               trigger = "state";
-              entity_id = ["switch.heating_switch"];
+              entity_id = ["light.rust_logo"];
             }
           ];
           actions = [
             (set-light-to-color {
-              input_entity_id = "switch.heating_switch";
+              input_entity_id = "light.rust_logo";
               target = {entity_id = "light.state_5_light";};
-              color = [255 255 0];
+              color = [255 120 20];
             })
           ];
         }
 
         # Presence sensor downstairs
         {
-          alias = "Light entry";
+          alias = "light entry";
           description = "Turn on or off the light in the entry depending on a presense sensor";
           mode = "single";
           triggers = [
