@@ -105,7 +105,7 @@
           forward-addr = [
             "1.1.1.1@853#cloudflare-dns.com"
             "1.0.0.1@853#cloudflare-dns.com"
-            "86.54.11.100"
+            "86.54.11.100@853#unfiltered.joindns4.eu"
           ];
           forward-tls-upstream = true;
         }
