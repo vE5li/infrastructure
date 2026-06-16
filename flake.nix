@@ -197,13 +197,16 @@
     central-ip-address = "192.168.188.10";
     gateway-ip-address = "167.235.247.100";
 
+    home-subnet = "192.168.188.0/24";
+    wireguard-subnet = "10.0.0.0/24";
+
     wireguard-port = 51820;
 
     gateway-wireguard-public-key = "u/Y0ZdoC7LQrmipMe8Ny38w7wdiLu1g3D+to+L+I4Vc=";
     gateway-wireguard-peer = {
       ${gateway-wireguard-public-key} = {
         endpoint = "${gateway-ip-address}:${toString wireguard-port}";
-        allowed-ips = "0.0.0.0/0";
+        allowed-ips = "${wireguard-subnet};${home-subnet};";
         persistent-keepalive = 25;
       };
     };
@@ -373,8 +376,7 @@
       laptop = with devices.laptop; {
         deployment = {
           tags = ["home"];
-          # targetHost = "${host-name}.yggdrasil";
-          targetHost = "${host-name}";
+          targetHost = "${host-name}.wireguard";
         };
 
         # NixOS modules and config
@@ -409,8 +411,10 @@
 
           wireguard = {
             private-key = ./secrets/laptop-wireguard-private-key.env.age;
-            address = "${laptop-wireguard-address}/32";
+            address = "${laptop-wireguard-address}/24";
             port = wireguard-port;
+            trusted-interfaces = [];
+            route-metric = 700;
             peers = gateway-wireguard-peer;
           };
 
@@ -454,7 +458,8 @@
 
         deployment = {
           tags = ["home"];
-          targetHost = "${host-name}.wireguard";
+          # targetHost = "${host-name}.wireguard";
+          targetHost = "${host-name}";
         };
 
         # NixOS modules and config
@@ -485,8 +490,10 @@
 
           wireguard = {
             private-key = ./secrets/steam-deck-wireguard-private-key.env.age;
-            address = "${steam-deck-wireguard-address}/32";
+            address = "${steam-deck-wireguard-address}/24";
             port = wireguard-port;
+            trusted-interfaces = [];
+            route-metric = 700;
             peers = gateway-wireguard-peer;
           };
 
@@ -601,7 +608,8 @@
             open-firewall = true;
             port = wireguard-port;
             peers = {
-              "wT9Q29FMrYymKiga3iZFx7N/aJcl+6G9V2KafIX2AyQ=".allowed-ips = "${central-ip-address}/24;";
+              # Central
+              "wT9Q29FMrYymKiga3iZFx7N/aJcl+6G9V2KafIX2AyQ=".allowed-ips = home-subnet;
               "P1cfw4oorp+TXTVbfux2GnrJp1k3pEVlCdbchwJozmI=".allowed-ips = "${phone-wireguard-address}/32";
               "Xsb1zCu3bjkZkzDhKbyHrHbSwMbW/PwW4Frcct/LZk8=".allowed-ips = "${laptop-wireguard-address}/32";
               "BWefh5w+QCSHJkOwVzMxf8pPIuhMlXqL4HXuMr3zPHs=".allowed-ips = "${steam-deck-wireguard-address}/32";

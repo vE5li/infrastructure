@@ -43,6 +43,15 @@
       type = types.nullOr types.str;
       default = null;
     };
+    route-metric = mkOption {
+      description = ''
+        Metric for routes installed from this profile (including routes
+        derived from peer AllowedIPs). Higher values make these routes
+        less preferred when another connection provides an overlapping route.
+      '';
+      type = types.nullOr types.int;
+      default = null;
+    };
     peers = mkOption {
       description = "WireGuard peers. The name is the private-key";
       type = types.attrs;
@@ -60,6 +69,10 @@
 
     networking.firewall.allowedUDPPorts = lib.mkIf open-firewall [port];
     networking.firewall.trustedInterfaces = lib.mkIf (trusted-interfaces != null) ([interface-name] ++ trusted-interfaces);
+
+    # Allow routing packets on the wireguard interface back to non-wireguard sources.
+    # E.g. `computer` pinging `laptop.wireguard`
+    networking.firewall.checkReversePath = "loose";
 
     networking.nat = lib.mkIf (nat-interface != null) {
       enable = true;
@@ -90,6 +103,9 @@
           }
           // lib.optionalAttrs (address != null) {
             inherit address;
+          }
+          // lib.optionalAttrs (route-metric != null) {
+            route-metric = toString route-metric;
           }
           // lib.optionalAttrs (explicit-route != null) {
             route1 = explicit-route;
