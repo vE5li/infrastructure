@@ -376,7 +376,7 @@
       laptop = with devices.laptop; {
         deployment = {
           tags = ["home"];
-          targetHost = "${host-name}.wireguard";
+          targetHost = "${host-name}.yggdrasil";
         };
 
         # NixOS modules and config
@@ -458,8 +458,7 @@
 
         deployment = {
           tags = ["home"];
-          # targetHost = "${host-name}.wireguard";
-          targetHost = "${host-name}";
+          targetHost = "${host-name}.yggdrasil";
         };
 
         # NixOS modules and config
@@ -625,9 +624,12 @@
               "85084e044c11649d6bf7c7715efa80f274b2ec3298cb868756e21d0b0a2b0559"
               # Computer
               "8e4bd08c89555b4369db867f7c598334254080bb8ce6c7f1d47ea8d204dfa5b5"
-              # Laptop TODO:
-              # Steam Deck TODO:
-              # Phone: TODO:
+              # Laptop
+              "e51c275da39b26ef83eff1e4a3ff62d2a70684578666c2951ee8dc97bfe68912"
+              # Steam Deck
+              "99076c5314bb02b52801b6e1b6b0f58029dd85e7bfc54674d4c718ad98126a16"
+              # Phone
+              "5b5f31ed0655cea4d05ac925400350bc202136a16d6e9ef99d453f3be6543fa9"
               # Simon PC
               "b12d3901b159029248c28244dbb40b5965f7a6106464f362adf48970a400a970"
               # Jonas PC
